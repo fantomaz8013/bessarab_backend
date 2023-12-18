@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades;
@@ -22,9 +23,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/test', function (Request $request) {
-    return "123";
-});
+Route::get('/products', [\App\Http\Controllers\ProductController::class, 'index']);
+Route::get('/categories', [\App\Http\Controllers\ProductCategoryController::class, 'index']);
+Route::post('/categories', [\App\Http\Controllers\ProductCategoryController::class, 'store']);
+Route::put('/categories/{ProductCategory}', [\App\Http\Controllers\ProductCategoryController::class, 'update']);
+
+Route::get('/orders', [\App\Http\Controllers\OrderController::class, 'index']);
+Route::post('/orders', [\App\Http\Controllers\OrderController::class, 'store']);
+Route::put('/orders/{Order}/status', [\App\Http\Controllers\OrderController::class, 'status']);
+
+
+
+Route::post('/products', [\App\Http\Controllers\ProductController::class, 'store']);
 
 Route::post('/tokens/create', function (\App\Http\Requests\TokenRequest $request) {
     $data = $request->validated();
