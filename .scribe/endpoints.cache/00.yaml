@@ -41,7 +41,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer a8hEDZ3fvbg546cedVk1P6a'
+      - 'Bearer E5bd8f1VvD3Phc66ge4aakZ'
     controller: null
     method: null
     route: null
@@ -80,7 +80,7 @@ endpoints:
         name: category
         description: 'Id категории.'
         required: false
-        example: 11
+        example: 13
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -116,7 +116,7 @@ endpoints:
         custom: []
     cleanBodyParameters:
       title: Шампунь
-      category: 11
+      category: 13
       size:
         - '200'
         - '1000'
@@ -126,7 +126,7 @@ endpoints:
     responses:
       -
         status: 200
-        content: '[{"id":1,"title":"\u0428\u0430\u043c\u043f\u0443\u043d\u044c","avatar_url":"\u0432\u0444\u0432\u0446","description":"\u0432\u0444\u0446\u0432\u0446","result":"\u0444\u0446\u0432\u0444\u0446","Purpose":"\u0444\u0446\u0432\u0444\u0446\u0432","price":"1000.00","product_category_id":1,"created_at":"2023-12-08T21:43:18.000000Z","updated_at":"2023-12-07T21:43:21.000000Z","category":{"id":1,"name":"\u0428\u0430\u043c\u043f\u0443\u043d\u044c"},"sizes":[{"id":1,"value":"100","unit":"ml","product_id":1}]}]'
+        content: '[]'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -135,6 +135,390 @@ endpoints:
           access-control-allow-origin: '*'
         description: null
         custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/categories
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display a listing of the resource.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '[]'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '58'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/categories
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Store a newly created resource in storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: ''
+        required: true
+        example: nisi
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      name: nisi
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/categories/{ProductCategory_id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update the specified resource in storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      ProductCategory_id:
+        name: ProductCategory_id
+        description: 'The ID of the ProductCategory.'
+        required: true
+        example: quae
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      ProductCategory_id: quae
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: ''
+        required: true
+        example: provident
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      name: provident
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/orders
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      firstName:
+        name: firstName
+        description: .
+        required: false
+        example: Шампунь
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      lastName:
+        name: lastName
+        description: .
+        required: false
+        example: Шампунь
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      email:
+        name: email
+        description: .
+        required: false
+        example: Шампунь
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      phone:
+        name: phone
+        description: .
+        required: false
+        example: Шампунь
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      city:
+        name: city
+        description: .
+        required: false
+        example: Шампунь
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      address:
+        name: address
+        description: .
+        required: false
+        example: Шампунь
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanBodyParameters:
+      firstName: Шампунь
+      lastName: Шампунь
+      email: Шампунь
+      phone: Шампунь
+      city: Шампунь
+      address: Шампунь
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '[]'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '57'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/orders
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Store a newly created resource in storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      firstName:
+        name: firstName
+        description: ''
+        required: true
+        example: aut
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      lastName:
+        name: lastName
+        description: ''
+        required: true
+        example: quas
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      email:
+        name: email
+        description: ''
+        required: true
+        example: jschmeler@example.net
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      phone:
+        name: phone
+        description: ''
+        required: true
+        example: excepturi
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      city:
+        name: city
+        description: ''
+        required: true
+        example: quo
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      address:
+        name: address
+        description: ''
+        required: true
+        example: itaque
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      products:
+        name: products
+        description: ''
+        required: true
+        example:
+          - quia
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      firstName: aut
+      lastName: quas
+      email: jschmeler@example.net
+      phone: excepturi
+      city: quo
+      address: itaque
+      products:
+        - quia
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/orders/{Order_id}/status'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      Order_id:
+        name: Order_id
+        description: 'The ID of the Order.'
+        required: true
+        example: 6
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      Order_id: 6
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      status_id:
+        name: status_id
+        description: ''
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      status_id: 1
+    fileParameters: []
+    responses: []
     responseFields: []
     auth: []
     controller: null
@@ -166,7 +550,7 @@ endpoints:
         name: title
         description: ''
         required: true
-        example: nulla
+        example: qui
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -175,7 +559,7 @@ endpoints:
         name: description
         description: ''
         required: true
-        example: 'Mollitia officiis id id eos adipisci aut est.'
+        example: 'Sunt quibusdam sunt doloremque harum perspiciatis.'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -184,7 +568,7 @@ endpoints:
         name: result
         description: ''
         required: false
-        example: voluptas
+        example: vero
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -193,7 +577,7 @@ endpoints:
         name: Purpose
         description: ''
         required: false
-        example: explicabo
+        example: ut
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -202,7 +586,7 @@ endpoints:
         name: price
         description: ''
         required: true
-        example: 19
+        example: 9
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -239,7 +623,7 @@ endpoints:
         name: 'sizes[].unit'
         description: ''
         required: false
-        example: saepe
+        example: quaerat
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -248,7 +632,7 @@ endpoints:
         name: 'sizes[].value'
         description: ''
         required: false
-        example: eligendi
+        example: et
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -264,15 +648,15 @@ endpoints:
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      title: nulla
-      description: 'Mollitia officiis id id eos adipisci aut est.'
-      result: voluptas
-      Purpose: explicabo
-      price: 19
+      title: qui
+      description: 'Sunt quibusdam sunt doloremque harum perspiciatis.'
+      result: vero
+      Purpose: ut
+      price: 9
       sizes:
         -
-          unit: saepe
-          value: eligendi
+          unit: quaerat
+          value: et
     fileParameters:
       avatar: null
       images:
@@ -309,7 +693,7 @@ endpoints:
         name: login
         description: ''
         required: true
-        example: nam
+        example: aut
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -318,14 +702,14 @@ endpoints:
         name: password
         description: ''
         required: true
-        example: '5(#Q><f>&yWI{/_'
+        example: '6|7TcuBip]):'
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      login: nam
-      password: '5(#Q><f>&yWI{/_'
+      login: aut
+      password: '6|7TcuBip]):'
     fileParameters: []
     responses: []
     responseFields: []
