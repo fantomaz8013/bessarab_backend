@@ -30,13 +30,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/webhook', function (Request $request) {
     $data = $request->all();
     $chatId = $data['message']['chat']['id'];
+    $text = $data['message']['chat'];
 
-    $text = "Hello world";
-    $data = http_build_query([
-        'chat_id' => $chatId,
-        'text' => $text
-    ]);
-    file_get_contents("https://api.telegram.org/bot6720731238:AAGcZ4QSSFRVWYrL8BzuRbGYiMRoWQR8oAA/sendMessage?$data");
+    if ($text == '/start')
+    {
+        $name = $data['from']['first_name'] . " " . $data['from']['last_name'];
+        $text = "Привет $name. Теперь вы будете получать заказы с сайта";
+        $data = http_build_query([
+            'chat_id' => $chatId,
+            'text' => $text
+        ]);
+        file_get_contents("https://api.telegram.org/bot6720731238:AAGcZ4QSSFRVWYrL8BzuRbGYiMRoWQR8oAA/sendMessage?$data");
+    }
 
     return response('Ok', 200);
 });
