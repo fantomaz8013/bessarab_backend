@@ -48,7 +48,7 @@ class OrderController extends Controller
         {
             OrderProduct::create([
                 'order_id' => $order->id,
-                'product_id' => $product->id,
+                'product_id' => $product,
             ]);
         }
 
