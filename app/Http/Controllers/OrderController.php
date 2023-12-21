@@ -59,18 +59,18 @@ class OrderController extends Controller
             ->get();
 
         $text = "У вас новый заказ #{$order->id} \n
-Заказчик: {$order->first_name} {$order->last_name} \n
-Email Заказчика: {$order->email} \n
-Телефон Заказчика: {$order->phone} \n
-Город Заказчика: {$order->city} \n
-Адрес Заказчика: {$order->address} \n
-Состав заказа: \n";
+<strong>Заказчик:</strong> {$order->first_name} {$order->last_name} \n
+<strong>Email Заказчика:</strong> {$order->email} \n
+<strong>Телефон Заказчика:</strong> {$order->phone} \n
+<strong>Город Заказчика:</strong> {$order->city} \n
+<strong>Адрес Заказчика:</strong> {$order->address} \n
+<strong>Состав заказа:</strong> \n";
 
         $productText = "";
 
         foreach ($order->products as $product)
         {
-            $productText.=$product->title." ". $product->price ."\n";
+            $productText.=$product->title." ". $product->price ."руб. \n";
         }
 
         $text.=$productText;
