@@ -23,8 +23,8 @@ class OrderStoreRequest extends FormRequest
     {
         return [
             'products.*' => 'exists:App\Models\Product,id|required',
-            'firstName' => 'string|required',
-            'lastName' => 'string|required',
+            'first_name' => 'string|required',
+            'last_name' => 'string|required',
             'email' => 'string|required',
             'phone' => 'string|required',
             'city' => 'string|required',
