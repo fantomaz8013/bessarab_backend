@@ -8,6 +8,7 @@ use App\Http\Requests\OrderStoreRequest;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
+use App\Models\TelegramUser;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -50,6 +51,38 @@ class OrderController extends Controller
                 'product_id' => $product->id,
             ]);
         }
+
+        $order = Order::find($order->id);
+        $order->load('products');
+
+        $telegramUsers = TelegramUser::where('is_work', 1)
+            ->get();
+
+        $text = "У вас новый заказ #{$order->id} \n
+        Заказчик: {$order->first_name} {$order->last_name} \n
+        Email Заказчика: {$order->email} \n
+        Телефон Заказчика: {$order->phone} \n
+        Город Заказчика: {$order->city} \n
+        Адрес Заказчика: {$order->address} \n";
+
+        $productText = "";
+
+        foreach ($order->products as $product)
+        {
+            $productText.=$product->title."\n";
+        }
+
+        $text.=$productText;
+
+        foreach ($telegramUsers as $telegramUser)
+        {
+            $data = http_build_query([
+                'chat_id' => $telegramUser->chat_id,
+                'text' => $text
+            ]);
+            file_get_contents("https://api.telegram.org/bot6720731238:AAGcZ4QSSFRVWYrL8BzuRbGYiMRoWQR8oAA/sendMessage?$data");
+        }
+
         return response()->json(["result" => "Ok"]);
     }
 
