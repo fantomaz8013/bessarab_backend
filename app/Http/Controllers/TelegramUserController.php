@@ -8,11 +8,11 @@ use Illuminate\Http\Request;
 class TelegramUserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Получить список пользователей телеграм бота
      */
     public function index()
     {
-        //
+        return TelegramUser::all();
     }
 
     /**

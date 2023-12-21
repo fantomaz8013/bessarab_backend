@@ -26,6 +26,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/webhook', [\App\Http\Controllers\TelegramUserController::class, 'webhook']);
 
+
+Route::get('/telegramuser', [\App\Http\Controllers\TelegramUserController::class, 'index']);
 Route::get('/products', [\App\Http\Controllers\ProductController::class, 'index']);
 Route::get('/products/{Product}', [\App\Http\Controllers\ProductController::class, 'show']);
 Route::get('/categories', [\App\Http\Controllers\ProductCategoryController::class, 'index']);
