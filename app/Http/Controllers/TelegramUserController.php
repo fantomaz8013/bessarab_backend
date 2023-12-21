@@ -49,7 +49,7 @@ class TelegramUserController extends Controller
                 'text' => $text
             ]);
             file_get_contents("https://api.telegram.org/bot6720731238:AAGcZ4QSSFRVWYrL8BzuRbGYiMRoWQR8oAA/sendMessage?$data");
-            TelegramUser::create(['chat_id' => $chatId]);
+            TelegramUser::updateOrCreate(['chat_id' => $chatId], ['chat_id' => $chatId]);
         }
 
         return response('Ok', 200);
