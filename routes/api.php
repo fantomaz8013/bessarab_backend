@@ -30,7 +30,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/webhook', function (Request $request) {
     $data = $request->all();
     $chatId = $data['message']['chat']['id'];
-    $text = $data['message']['chat'];
+    $text = $data['message']['text'];
 
     if ($text == '/start')
     {
