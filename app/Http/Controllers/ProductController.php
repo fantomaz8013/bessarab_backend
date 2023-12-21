@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     /**
+     * Получить список продуктов
      * @bodyParam title string Название продукта. Example: Шампунь
      * @bodyParam category int Id категории.
      * @bodyParam size string[] Нужные объемы. Example: ["200", "1000"]
@@ -34,6 +35,7 @@ class ProductController extends Controller
     }
 
     /**
+     * Создать продукт
      * @header Content-Type multipart/form-data
      * @header Accept multipart/form-data
      * @param ProductStoreRequest $request
@@ -85,7 +87,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Получить продукт по ID
      */
     public function show(Product $product)
     {
