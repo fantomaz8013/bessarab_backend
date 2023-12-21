@@ -24,28 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-/**
- * Вебхук для телеграм бота
- */
-Route::post('/webhook', function (Request $request) {
-    $data = $request->all();
-    $chatId = $data['message']['chat']['id'];
-    $text = $data['message']['text'];
-    $allData = http_build_query($data);
-
-    if ($text == '/start')
-    {
-        $name = $data['message']['from']['first_name'] . " " . $data['message']['from']['last_name'];
-        $text = "Привет $name. Теперь вы будете получать заказы с сайта";
-        $data = http_build_query([
-            'chat_id' => $chatId,
-            'text' => $text
-        ]);
-        file_get_contents("https://api.telegram.org/bot6720731238:AAGcZ4QSSFRVWYrL8BzuRbGYiMRoWQR8oAA/sendMessage?$data");
-    }
-
-    return response('Ok', 200);
-});
+Route::post('/webhook', [\App\Http\Controllers\TelegramUserController::class, 'webhook']);
 
 Route::get('/products', [\App\Http\Controllers\ProductController::class, 'index']);
 Route::get('/products/{Product}', [\App\Http\Controllers\ProductController::class, 'show']);
