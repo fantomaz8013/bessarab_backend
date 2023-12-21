@@ -89,7 +89,9 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return Product::where('id', $product->id)
+            ->with('category', 'images', 'sizes')
+            ->first();
     }
 
     /**
