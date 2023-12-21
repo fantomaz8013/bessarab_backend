@@ -28,6 +28,8 @@ class OrderRequest extends FormRequest
             'phone' => 'string',
             'city' => 'string',
             'address' => 'string',
+            'page' => 'integer',
+            'limit' => 'integer',
         ];
     }
 }
