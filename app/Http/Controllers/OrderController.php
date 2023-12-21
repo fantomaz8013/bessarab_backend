@@ -15,12 +15,14 @@ class OrderController extends Controller
 {
     /**
      * Список заказов
-     * @bodyParam firstName string . Example: Шампунь
-     * @bodyParam lastName string . Example: Шампунь
-     * @bodyParam email string . Example: Шампунь
-     * @bodyParam phone string . Example: Шампунь
-     * @bodyParam city string . Example: Шампунь
-     * @bodyParam address string . Example: Шампунь
+     * @bodyParam firstName string . Example: Иван
+     * @bodyParam lastName string . Example: Иванов
+     * @bodyParam email string . Example: Ivan@mail.ru
+     * @bodyParam phone string . Example: 89999999999
+     * @bodyParam city string . Example: Ивановск
+     * @bodyParam address string . Example: улица иванова 15 квартира 14
+     * @bodyParam page int Страница. Example: 1
+     * @bodyParam limit int Сколько выдать записей. Example: 10.
      */
     public function index(OrderFilter $filter)
     {
