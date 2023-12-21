@@ -13,11 +13,11 @@ class ProductController extends Controller
 {
     /**
      * Получить список продуктов
-     * @bodyParam title string Название продукта. Example: Шампунь
-     * @bodyParam category int Id категории.
-     * @bodyParam size string[] Нужные объемы. Example: ["200", "1000"]
-     * @bodyParam page int Страница. Example: 1
-     * @bodyParam limit int Сколько выдать записей. Example: 10.
+     * @queryParam  title string Название продукта. Example: Шампунь
+     * @queryParam  category int Id категории.
+     * @queryParam  size string[] Нужные объемы. Example: ["200", "1000"]
+     * @queryParam  page int Страница. Example: 1
+     * @queryParam  limit int Сколько выдать записей. Example: 10.
      */
     public function index(ProductFilter $filters)
     {
