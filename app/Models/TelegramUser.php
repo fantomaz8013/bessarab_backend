@@ -9,6 +9,7 @@ class TelegramUser extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'chat_id'
+        'chat_id',
+        'name',
     ];
 }
