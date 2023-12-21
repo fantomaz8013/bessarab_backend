@@ -94,10 +94,11 @@ class OrderController extends Controller
      * @param Order $order
      * @return \Illuminate\Http\JsonResponse
      */
-    public function status(OrderStatusRequest $request, Order $order)
+    public function status(OrderStatusRequest $request, Order $Order)
     {
         $data = $request->validated();
-        $order->status_id = $data['status_id'];
+        $Order->status_id = $data['status_id'];
+        $Order->save();
         return response()->json(["result" => "Ok"]);
     }
 
