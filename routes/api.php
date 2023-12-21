@@ -23,6 +23,12 @@ use Illuminate\Support\Facades;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+/**
+ * Вебхук для телеграм бота
+ */
+Route::get('/webhook', function (Request $request) {
+    return response('Ok', 200);
+});
 
 Route::get('/products', [\App\Http\Controllers\ProductController::class, 'index']);
 Route::get('/products/{Product}', [\App\Http\Controllers\ProductController::class, 'show']);
