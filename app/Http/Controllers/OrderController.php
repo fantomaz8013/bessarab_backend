@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
     /**
+     * Список заказов
      * @bodyParam firstName string . Example: Шампунь
      * @bodyParam lastName string . Example: Шампунь
      * @bodyParam email string . Example: Шампунь
@@ -35,7 +36,7 @@ class OrderController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Создать заказ
      */
     public function store(OrderStoreRequest $request)
     {
@@ -52,6 +53,12 @@ class OrderController extends Controller
         return response()->json(["result" => "Ok"]);
     }
 
+    /**
+     * Изменить статус заказа
+     * @param OrderStatusRequest $request
+     * @param Order $order
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function status(OrderStatusRequest $request, Order $order)
     {
         $data = $request->validated();

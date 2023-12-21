@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class ProductCategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Получить список категорий
      */
     public function index()
     {
@@ -25,7 +25,7 @@ class ProductCategoryController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Создать категорию
      */
     public function store(CreateCategoryRequest $request)
     {
@@ -51,7 +51,7 @@ class ProductCategoryController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Обновить категорию
      */
     public function update(CreateCategoryRequest $request, ProductCategory $productCategory)
     {

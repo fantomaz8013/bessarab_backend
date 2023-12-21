@@ -17,6 +17,7 @@ use Illuminate\Support\Facades;
 */
 
 /**
+ * Получить данные текущего пользователя
  * @authenticated
  */
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -37,6 +38,9 @@ Route::put('/orders/{Order}/status', [\App\Http\Controllers\OrderController::cla
 
 Route::post('/products', [\App\Http\Controllers\ProductController::class, 'store']);
 
+/**
+ * Получить токен доступа ( для админки )
+ */
 Route::post('/tokens/create', function (\App\Http\Requests\TokenRequest $request) {
     $data = $request->validated();
     $user = \App\Models\User::where("name", $data['login'])->first();
