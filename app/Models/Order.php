@@ -33,6 +33,7 @@ class Order extends Model
         'phone',
         'city',
         'address',
+        'delivery_type',
     ];
 
     public function scopeFilter(Builder $builder, QueryFilter $filters)

@@ -29,6 +29,7 @@ class OrderStoreRequest extends FormRequest
             'phone' => 'string|required',
             'city' => 'string|required',
             'address' => 'string|required',
+            'delivery_type' => 'integer|required',
         ];
     }
 }
