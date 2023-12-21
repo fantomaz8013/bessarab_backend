@@ -31,10 +31,11 @@ Route::post('/webhook', function (Request $request) {
     $data = $request->all();
     $chatId = $data['message']['chat']['id'];
     $text = $data['message']['text'];
+    $allData = http_build_query($data);
 
     if ($text == '/start')
     {
-        $name = $data['from']['first_name'] . " " . $data['from']['last_name'];
+        $name = $data['message']['from']['first_name'] . " " . $data['message']['from']['last_name'];
         $text = "Привет $name. Теперь вы будете получать заказы с сайта";
         $data = http_build_query([
             'chat_id' => $chatId,
