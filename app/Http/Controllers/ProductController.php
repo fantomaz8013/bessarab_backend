@@ -89,9 +89,9 @@ class ProductController extends Controller
     /**
      * Получить продукт по ID
      */
-    public function show(Product $product)
+    public function show(Product $Product)
     {
-        return Product::where('id', $product->id)
+        return Product::where('id', $Product->id)
             ->with('category', 'images', 'sizes')
             ->first();
     }
