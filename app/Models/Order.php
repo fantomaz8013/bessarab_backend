@@ -27,8 +27,8 @@ class Order extends Model
      */
     const ORDER_STATUS_CLOSED = 4;
     protected $fillable = [
-        'firstName',
-        'lastName',
+        'first_name',
+        'last_name',
         'email',
         'phone',
         'city',
