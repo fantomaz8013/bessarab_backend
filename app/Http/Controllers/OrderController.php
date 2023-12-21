@@ -58,13 +58,13 @@ class OrderController extends Controller
         $telegramUsers = TelegramUser::where('is_work', 1)
             ->get();
 
-        $text = "У вас новый заказ #{$order->id} \n
-<strong>Заказчик:</strong> {$order->first_name} {$order->last_name} \n
-<strong>Email Заказчика:</strong> {$order->email} \n
-<strong>Телефон Заказчика:</strong> {$order->phone} \n
-<strong>Город Заказчика:</strong> {$order->city} \n
-<strong>Адрес Заказчика:</strong> {$order->address} \n
-<strong>Состав заказа:</strong> \n";
+        $text = "<b>У вас новый заказ #{$order->id} </b>\n
+<b>Заказчик:</b> {$order->first_name} {$order->last_name} \n
+<b>Email Заказчика:</b> {$order->email} \n
+<b>Телефон Заказчика:</b> {$order->phone} \n
+<b>Город Заказчика:</b> {$order->city} \n
+<b>Адрес Заказчика:</b> {$order->address} \n
+<b>Состав заказа:</b> \n";
 
         $productText = "";
 
@@ -79,7 +79,8 @@ class OrderController extends Controller
         {
             $data = http_build_query([
                 'chat_id' => $telegramUser->chat_id,
-                'text' => $text
+                'text' => $text,
+                'parse_mode' => 'html'
             ]);
             file_get_contents("https://api.telegram.org/bot6720731238:AAGcZ4QSSFRVWYrL8BzuRbGYiMRoWQR8oAA/sendMessage?$data");
         }
