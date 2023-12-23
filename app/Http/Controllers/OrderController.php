@@ -27,6 +27,7 @@ class OrderController extends Controller
     public function index(OrderFilter $filter)
     {
         return Order::filter($filter)
+            ->with('products')
             ->get();
     }
 
@@ -73,7 +74,7 @@ class OrderController extends Controller
 
         foreach ($order->products as $product)
         {
-            $productText.=$product->title." ". $product->price ."руб. \n";
+            $productText.=$product->title." ". ($product->price * $product->pivot->quantity)."руб. x{$product->pivot->quantity}\n";
         }
 
         $text.=$productText;

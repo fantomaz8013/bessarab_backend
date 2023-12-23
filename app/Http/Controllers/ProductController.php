@@ -56,6 +56,7 @@ class ProductController extends Controller
         $product = Product::create($data);
 
         $product->save();
+
         if (isset($data['sizes']))
         {
             foreach ($data['sizes'] as $size)
