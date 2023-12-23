@@ -79,6 +79,7 @@ class OrderController extends Controller
         }
 
         $text.=$productText;
+        $text.="----------------------------------------\n";
         $text.="<b>Сумма заказа: </b>" . $allPrice;
         foreach ($telegramUsers as $telegramUser)
         {
