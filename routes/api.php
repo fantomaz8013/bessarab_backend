@@ -32,6 +32,8 @@ Route::get('/products', [\App\Http\Controllers\ProductController::class, 'index'
 Route::get('/products/{Product}', [\App\Http\Controllers\ProductController::class, 'show']);
 Route::get('/categories', [\App\Http\Controllers\ProductCategoryController::class, 'index']);
 Route::post('/categories', [\App\Http\Controllers\ProductCategoryController::class, 'store']);
+Route::post('/contact', [\App\Http\Controllers\ContactController::class, 'store']);
+Route::get('/contact', [\App\Http\Controllers\ContactController::class, 'index']);
 Route::put('/categories/{ProductCategory}', [\App\Http\Controllers\ProductCategoryController::class, 'update']);
 
 Route::get('/orders', [\App\Http\Controllers\OrderController::class, 'index']);

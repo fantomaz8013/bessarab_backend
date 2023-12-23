@@ -83,14 +83,20 @@
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-products">
                                 <a href="#endpoints-GETapi-products">Получить список продуктов</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-products--Product_id-">
-                                <a href="#endpoints-GETapi-products--Product_id-">Получить продукт по ID</a>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-products--Product-">
+                                <a href="#endpoints-GETapi-products--Product-">Получить продукт по ID</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-categories">
                                 <a href="#endpoints-GETapi-categories">Получить список категорий</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-categories">
                                 <a href="#endpoints-POSTapi-categories">Создать категорию</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-contact">
+                                <a href="#endpoints-POSTapi-contact">Создать заявку ( форма на главной )</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-contact">
+                                <a href="#endpoints-GETapi-contact">Получить список заявок ( форма на главной )</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-PUTapi-categories--ProductCategory_id-">
                                 <a href="#endpoints-PUTapi-categories--ProductCategory_id-">Обновить категорию</a>
@@ -101,8 +107,8 @@
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-orders">
                                 <a href="#endpoints-POSTapi-orders">Создать заказ</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-PUTapi-orders--Order_id--status">
-                                <a href="#endpoints-PUTapi-orders--Order_id--status">Изменить статус заказа</a>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-PUTapi-orders--Order--status">
+                                <a href="#endpoints-PUTapi-orders--Order--status">Изменить статус заказа</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-products">
                                 <a href="#endpoints-POSTapi-products">Создать продукт</a>
@@ -121,7 +127,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: December 21, 2023</li>
+        <li>Last updated: December 23, 2023</li>
     </ul>
 </div>
 
@@ -528,20 +534,9 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:57000/api/products" \
+    --get "http://localhost:57000/api/products?title=%D0%A8%D0%B0%D0%BC%D0%BF%D1%83%D0%BD%D1%8C&amp;category=10&amp;size[]=200&amp;size[]=1000&amp;page=1&amp;limit=10" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json" \
-    --data "{
-    \"title\": \"Шампунь\",
-    \"category\": 9,
-    \"size\": [
-        \"200\",
-        \"1000\"
-    ],
-    \"page\": 1,
-    \"limit\": 10
-}"
-</code></pre></div>
+    --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
@@ -549,33 +544,32 @@ You can check the Dev Tools console for debugging information.</code></pre>
     "http://localhost:57000/api/products"
 );
 
+const params = {
+    "title": "Шампунь",
+    "category": "10",
+    "size[0]": "200",
+    "size[1]": "1000",
+    "page": "1",
+    "limit": "10",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
 const headers = {
     "Content-Type": "application/json",
     "Accept": "application/json",
 };
 
-let body = {
-    "title": "Шампунь",
-    "category": 9,
-    "size": [
-        "200",
-        "1000"
-    ],
-    "page": 1,
-    "limit": 10
-};
-
 fetch(url, {
     method: "GET",
     headers,
-    body: JSON.stringify(body),
 }).then(response =&gt; response.json());</code></pre></div>
 
 </span>
 
 <span id="example-responses-GETapi-products">
             <blockquote>
-            <p>Example response (200):</p>
+            <p>Example response (500):</p>
         </blockquote>
                 <details class="annotation">
             <summary style="cursor: pointer;">
@@ -588,83 +582,504 @@ x-ratelimit-remaining: 58
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
-<code class="language-json" style="max-height: 300px;">[
-    {
-        &quot;id&quot;: 1,
-        &quot;title&quot;: &quot;Шампунь&quot;,
-        &quot;avatar_url&quot;: &quot;вфвц&quot;,
-        &quot;description&quot;: &quot;вфцвц&quot;,
-        &quot;result&quot;: &quot;фцвфц&quot;,
-        &quot;Purpose&quot;: &quot;фцвфцв&quot;,
-        &quot;price&quot;: &quot;1000.00&quot;,
-        &quot;product_category_id&quot;: 1,
-        &quot;created_at&quot;: &quot;2023-12-08T21:43:18.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2023-12-07T21:43:21.000000Z&quot;,
-        &quot;category&quot;: {
-            &quot;id&quot;: 1,
-            &quot;name&quot;: &quot;Шампунь&quot;
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;SQLSTATE[42S22]: Column not found: 1054 Unknown column &#039;sizes.value&#039; in &#039;where clause&#039; (Connection: mysql, SQL: select * from `products` where `title` LIKE %Шампунь% and `product_category_id` = 10 and `sizes`.`value` in (200, 1000) limit 10 offset 0)&quot;,
+    &quot;exception&quot;: &quot;Illuminate\\Database\\QueryException&quot;,
+    &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Database/Connection.php&quot;,
+    &quot;line&quot;: 822,
+    &quot;trace&quot;: [
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Database/Connection.php&quot;,
+            &quot;line&quot;: 776,
+            &quot;function&quot;: &quot;runQueryCallback&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Database\\Connection&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
         },
-        &quot;sizes&quot;: [
-            {
-                &quot;id&quot;: 1,
-                &quot;value&quot;: &quot;100&quot;,
-                &quot;unit&quot;: &quot;ml&quot;,
-                &quot;product_id&quot;: 1
-            }
-        ]
-    },
-    {
-        &quot;id&quot;: 4,
-        &quot;title&quot;: &quot;nulla&quot;,
-        &quot;avatar_url&quot;: &quot;storage/img/1702111807568851.jpg&quot;,
-        &quot;description&quot;: &quot;Mollitia officiis id id eos adipisci aut est.&quot;,
-        &quot;result&quot;: &quot;voluptas&quot;,
-        &quot;Purpose&quot;: &quot;explicabo&quot;,
-        &quot;price&quot;: &quot;19.00&quot;,
-        &quot;product_category_id&quot;: 1,
-        &quot;created_at&quot;: &quot;2023-12-09T08:50:07.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2023-12-09T08:50:07.000000Z&quot;,
-        &quot;category&quot;: {
-            &quot;id&quot;: 1,
-            &quot;name&quot;: &quot;Шампунь&quot;
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Database/Connection.php&quot;,
+            &quot;line&quot;: 424,
+            &quot;function&quot;: &quot;run&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Database\\Connection&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
         },
-        &quot;sizes&quot;: []
-    },
-    {
-        &quot;id&quot;: 5,
-        &quot;title&quot;: &quot;nulla&quot;,
-        &quot;avatar_url&quot;: &quot;storage/img/1702111932715061.jpg&quot;,
-        &quot;description&quot;: &quot;Mollitia officiis id id eos adipisci aut est.&quot;,
-        &quot;result&quot;: &quot;voluptas&quot;,
-        &quot;Purpose&quot;: &quot;explicabo&quot;,
-        &quot;price&quot;: &quot;19.00&quot;,
-        &quot;product_category_id&quot;: 1,
-        &quot;created_at&quot;: &quot;2023-12-09T08:52:12.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2023-12-09T08:52:12.000000Z&quot;,
-        &quot;category&quot;: {
-            &quot;id&quot;: 1,
-            &quot;name&quot;: &quot;Шампунь&quot;
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php&quot;,
+            &quot;line&quot;: 2752,
+            &quot;function&quot;: &quot;select&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Database\\Connection&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
         },
-        &quot;sizes&quot;: []
-    },
-    {
-        &quot;id&quot;: 6,
-        &quot;title&quot;: &quot;nulla&quot;,
-        &quot;avatar_url&quot;: &quot;storage/img/1702111944989595.jpg&quot;,
-        &quot;description&quot;: &quot;Mollitia officiis id id eos adipisci aut est.&quot;,
-        &quot;result&quot;: &quot;voluptas&quot;,
-        &quot;Purpose&quot;: &quot;explicabo&quot;,
-        &quot;price&quot;: &quot;19.00&quot;,
-        &quot;product_category_id&quot;: 1,
-        &quot;created_at&quot;: &quot;2023-12-09T08:52:24.000000Z&quot;,
-        &quot;updated_at&quot;: &quot;2023-12-09T08:52:24.000000Z&quot;,
-        &quot;category&quot;: {
-            &quot;id&quot;: 1,
-            &quot;name&quot;: &quot;Шампунь&quot;
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php&quot;,
+            &quot;line&quot;: 2740,
+            &quot;function&quot;: &quot;runSelect&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Database\\Query\\Builder&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
         },
-        &quot;sizes&quot;: []
-    }
-]</code>
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php&quot;,
+            &quot;line&quot;: 3294,
+            &quot;function&quot;: &quot;Illuminate\\Database\\Query\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Database\\Query\\Builder&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php&quot;,
+            &quot;line&quot;: 2741,
+            &quot;function&quot;: &quot;onceWithColumns&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Database\\Query\\Builder&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php&quot;,
+            &quot;line&quot;: 737,
+            &quot;function&quot;: &quot;get&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Database\\Query\\Builder&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php&quot;,
+            &quot;line&quot;: 721,
+            &quot;function&quot;: &quot;getModels&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Database\\Eloquent\\Builder&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/app/Http/Controllers/ProductController.php&quot;,
+            &quot;line&quot;: 26,
+            &quot;function&quot;: &quot;get&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Database\\Eloquent\\Builder&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Routing/Controller.php&quot;,
+            &quot;line&quot;: 54,
+            &quot;function&quot;: &quot;index&quot;,
+            &quot;class&quot;: &quot;App\\Http\\Controllers\\ProductController&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php&quot;,
+            &quot;line&quot;: 43,
+            &quot;function&quot;: &quot;callAction&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Controller&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Routing/Route.php&quot;,
+            &quot;line&quot;: 260,
+            &quot;function&quot;: &quot;dispatch&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\ControllerDispatcher&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Routing/Route.php&quot;,
+            &quot;line&quot;: 205,
+            &quot;function&quot;: &quot;runController&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Route&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Routing/Router.php&quot;,
+            &quot;line&quot;: 806,
+            &quot;function&quot;: &quot;run&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Route&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php&quot;,
+            &quot;line&quot;: 141,
+            &quot;function&quot;: &quot;Illuminate\\Routing\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php&quot;,
+            &quot;line&quot;: 50,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php&quot;,
+            &quot;line&quot;: 180,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\SubstituteBindings&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php&quot;,
+            &quot;line&quot;: 159,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php&quot;,
+            &quot;line&quot;: 135,
+            &quot;function&quot;: &quot;handleRequest&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\ThrottleRequests&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php&quot;,
+            &quot;line&quot;: 87,
+            &quot;function&quot;: &quot;handleRequestUsingNamedLimiter&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\ThrottleRequests&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php&quot;,
+            &quot;line&quot;: 180,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\ThrottleRequests&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php&quot;,
+            &quot;line&quot;: 116,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Routing/Router.php&quot;,
+            &quot;line&quot;: 807,
+            &quot;function&quot;: &quot;then&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Routing/Router.php&quot;,
+            &quot;line&quot;: 784,
+            &quot;function&quot;: &quot;runRouteWithinStack&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Routing/Router.php&quot;,
+            &quot;line&quot;: 748,
+            &quot;function&quot;: &quot;runRoute&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Routing/Router.php&quot;,
+            &quot;line&quot;: 737,
+            &quot;function&quot;: &quot;dispatchToRoute&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php&quot;,
+            &quot;line&quot;: 200,
+            &quot;function&quot;: &quot;dispatch&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php&quot;,
+            &quot;line&quot;: 141,
+            &quot;function&quot;: &quot;Illuminate\\Foundation\\Http\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Kernel&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php&quot;,
+            &quot;line&quot;: 21,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php&quot;,
+            &quot;line&quot;: 31,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php&quot;,
+            &quot;line&quot;: 180,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php&quot;,
+            &quot;line&quot;: 21,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php&quot;,
+            &quot;line&quot;: 40,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php&quot;,
+            &quot;line&quot;: 180,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\TrimStrings&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php&quot;,
+            &quot;line&quot;: 27,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php&quot;,
+            &quot;line&quot;: 180,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php&quot;,
+            &quot;line&quot;: 99,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php&quot;,
+            &quot;line&quot;: 180,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php&quot;,
+            &quot;line&quot;: 62,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php&quot;,
+            &quot;line&quot;: 180,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Http\\Middleware\\HandleCors&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php&quot;,
+            &quot;line&quot;: 39,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php&quot;,
+            &quot;line&quot;: 180,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Http\\Middleware\\TrustProxies&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php&quot;,
+            &quot;line&quot;: 116,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php&quot;,
+            &quot;line&quot;: 175,
+            &quot;function&quot;: &quot;then&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php&quot;,
+            &quot;line&quot;: 144,
+            &quot;function&quot;: &quot;sendRequestThroughRouter&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Kernel&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php&quot;,
+            &quot;line&quot;: 299,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Kernel&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php&quot;,
+            &quot;line&quot;: 287,
+            &quot;function&quot;: &quot;callLaravelOrLumenRoute&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php&quot;,
+            &quot;line&quot;: 92,
+            &quot;function&quot;: &quot;makeApiCall&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php&quot;,
+            &quot;line&quot;: 45,
+            &quot;function&quot;: &quot;makeResponseCall&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php&quot;,
+            &quot;line&quot;: 35,
+            &quot;function&quot;: &quot;makeResponseCallIfConditionsPass&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/knuckleswtf/scribe/src/Extracting/Extractor.php&quot;,
+            &quot;line&quot;: 209,
+            &quot;function&quot;: &quot;__invoke&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/knuckleswtf/scribe/src/Extracting/Extractor.php&quot;,
+            &quot;line&quot;: 166,
+            &quot;function&quot;: &quot;iterateThroughStrategies&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Extractor&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/knuckleswtf/scribe/src/Extracting/Extractor.php&quot;,
+            &quot;line&quot;: 95,
+            &quot;function&quot;: &quot;fetchResponses&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Extractor&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/knuckleswtf/scribe/src/GroupedEndpoints/GroupedEndpointsFromApp.php&quot;,
+            &quot;line&quot;: 124,
+            &quot;function&quot;: &quot;processRoute&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Extractor&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/knuckleswtf/scribe/src/GroupedEndpoints/GroupedEndpointsFromApp.php&quot;,
+            &quot;line&quot;: 71,
+            &quot;function&quot;: &quot;extractEndpointsInfoFromLaravelApp&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/knuckleswtf/scribe/src/GroupedEndpoints/GroupedEndpointsFromApp.php&quot;,
+            &quot;line&quot;: 49,
+            &quot;function&quot;: &quot;extractEndpointsInfoAndWriteToDisk&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/knuckleswtf/scribe/src/Commands/GenerateDocumentation.php&quot;,
+            &quot;line&quot;: 51,
+            &quot;function&quot;: &quot;get&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php&quot;,
+            &quot;line&quot;: 36,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\Commands\\GenerateDocumentation&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Container/Util.php&quot;,
+            &quot;line&quot;: 41,
+            &quot;function&quot;: &quot;Illuminate\\Container\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Container\\BoundMethod&quot;,
+            &quot;type&quot;: &quot;::&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php&quot;,
+            &quot;line&quot;: 93,
+            &quot;function&quot;: &quot;unwrapIfClosure&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Container\\Util&quot;,
+            &quot;type&quot;: &quot;::&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php&quot;,
+            &quot;line&quot;: 37,
+            &quot;function&quot;: &quot;callBoundMethod&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Container\\BoundMethod&quot;,
+            &quot;type&quot;: &quot;::&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Container/Container.php&quot;,
+            &quot;line&quot;: 662,
+            &quot;function&quot;: &quot;call&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Container\\BoundMethod&quot;,
+            &quot;type&quot;: &quot;::&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Console/Command.php&quot;,
+            &quot;line&quot;: 211,
+            &quot;function&quot;: &quot;call&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Container\\Container&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/symfony/console/Command/Command.php&quot;,
+            &quot;line&quot;: 326,
+            &quot;function&quot;: &quot;execute&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Console\\Command&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Console/Command.php&quot;,
+            &quot;line&quot;: 181,
+            &quot;function&quot;: &quot;run&quot;,
+            &quot;class&quot;: &quot;Symfony\\Component\\Console\\Command\\Command&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/symfony/console/Application.php&quot;,
+            &quot;line&quot;: 1096,
+            &quot;function&quot;: &quot;run&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Console\\Command&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/symfony/console/Application.php&quot;,
+            &quot;line&quot;: 324,
+            &quot;function&quot;: &quot;doRunCommand&quot;,
+            &quot;class&quot;: &quot;Symfony\\Component\\Console\\Application&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/symfony/console/Application.php&quot;,
+            &quot;line&quot;: 175,
+            &quot;function&quot;: &quot;doRun&quot;,
+            &quot;class&quot;: &quot;Symfony\\Component\\Console\\Application&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php&quot;,
+            &quot;line&quot;: 201,
+            &quot;function&quot;: &quot;run&quot;,
+            &quot;class&quot;: &quot;Symfony\\Component\\Console\\Application&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;/application/artisan&quot;,
+            &quot;line&quot;: 37,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Foundation\\Console\\Kernel&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        }
+    ]
+}</code>
  </pre>
     </span>
 <span id="execution-results-GETapi-products" hidden>
@@ -736,74 +1151,74 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <br>
 <p>Example: <code>application/json</code></p>
             </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>title</code></b>&nbsp;&nbsp;
+                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>title</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="title"                data-endpoint="GETapi-products"
                value="Шампунь"
-               data-component="body">
+               data-component="query">
     <br>
 <p>Название продукта. Example: <code>Шампунь</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>category</code></b>&nbsp;&nbsp;
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>category</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="category"                data-endpoint="GETapi-products"
-               value="9"
-               data-component="body">
+               value="10"
+               data-component="query">
     <br>
-<p>Id категории. Example: <code>9</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>size</code></b>&nbsp;&nbsp;
+<p>Id категории. Example: <code>10</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>size</code></b>&nbsp;&nbsp;
 <small>string[]</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="size[0]"                data-endpoint="GETapi-products"
-               data-component="body">
+               data-component="query">
         <input type="text" style="display: none"
                name="size[1]"                data-endpoint="GETapi-products"
-               data-component="body">
+               data-component="query">
     <br>
 <p>Нужные объемы.</p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>page</code></b>&nbsp;&nbsp;
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>page</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="page"                data-endpoint="GETapi-products"
                value="1"
-               data-component="body">
+               data-component="query">
     <br>
 <p>Страница. Example: <code>1</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>limit</code></b>&nbsp;&nbsp;
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>limit</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="limit"                data-endpoint="GETapi-products"
                value="10"
-               data-component="body">
+               data-component="query">
     <br>
 <p>Сколько выдать записей. Example: <code>10</code></p>
-        </div>
-        </form>
+            </div>
+                </form>
 
-                    <h2 id="endpoints-GETapi-products--Product_id-">Получить продукт по ID</h2>
+                    <h2 id="endpoints-GETapi-products--Product-">Получить продукт по ID</h2>
 
 <p>
 </p>
 
 
 
-<span id="example-requests-GETapi-products--Product_id-">
+<span id="example-requests-GETapi-products--Product-">
 <blockquote>Example request:</blockquote>
 
 
@@ -831,7 +1246,7 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-GETapi-products--Product_id-">
+<span id="example-responses-GETapi-products--Product-">
             <blockquote>
             <p>Example response (200):</p>
         </blockquote>
@@ -839,53 +1254,77 @@ fetch(url, {
             <summary style="cursor: pointer;">
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
-            <pre><code class="language-http">content-type: text/html; charset=UTF-8
-cache-control: no-cache, private
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 57
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
-<code class="language-json" style="max-height: 300px;"></code>
+<code class="language-json" style="max-height: 300px;">{
+    &quot;id&quot;: 1,
+    &quot;title&quot;: &quot;Шампунь&quot;,
+    &quot;avatar_url&quot;: &quot;вфвц&quot;,
+    &quot;description&quot;: &quot;вфцвц&quot;,
+    &quot;result&quot;: &quot;фцвфц&quot;,
+    &quot;Purpose&quot;: &quot;фцвфцв&quot;,
+    &quot;price&quot;: &quot;1000.00&quot;,
+    &quot;product_category_id&quot;: 1,
+    &quot;created_at&quot;: &quot;2023-12-08T21:43:18.000000Z&quot;,
+    &quot;updated_at&quot;: &quot;2023-12-07T21:43:21.000000Z&quot;,
+    &quot;category&quot;: {
+        &quot;id&quot;: 1,
+        &quot;name&quot;: &quot;Шампунь&quot;
+    },
+    &quot;images&quot;: [],
+    &quot;sizes&quot;: [
+        {
+            &quot;id&quot;: 1,
+            &quot;value&quot;: &quot;100&quot;,
+            &quot;unit&quot;: &quot;ml&quot;,
+            &quot;product_id&quot;: 1
+        }
+    ]
+}</code>
  </pre>
     </span>
-<span id="execution-results-GETapi-products--Product_id-" hidden>
+<span id="execution-results-GETapi-products--Product-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-GETapi-products--Product_id-"></span>:
+                id="execution-response-status-GETapi-products--Product-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-products--Product_id-"
+    <pre class="json"><code id="execution-response-content-GETapi-products--Product-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-GETapi-products--Product_id-" hidden>
+<span id="execution-error-GETapi-products--Product-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-products--Product_id-">
+    <pre><code id="execution-error-message-GETapi-products--Product-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-GETapi-products--Product_id-" data-method="GET"
-      data-path="api/products/{Product_id}"
+<form id="form-GETapi-products--Product-" data-method="GET"
+      data-path="api/products/{Product}"
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-products--Product_id-', this);">
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-products--Product-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-products--Product_id-"
-                    onclick="tryItOut('GETapi-products--Product_id-');">Try it out ⚡
+                    id="btn-tryout-GETapi-products--Product-"
+                    onclick="tryItOut('GETapi-products--Product-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-products--Product_id-"
-                    onclick="cancelTryOut('GETapi-products--Product_id-');" hidden>Cancel 🛑
+                    id="btn-canceltryout-GETapi-products--Product-"
+                    onclick="cancelTryOut('GETapi-products--Product-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-products--Product_id-"
+                    id="btn-executetryout-GETapi-products--Product-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -893,7 +1332,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-green">GET</small>
-            <b><code>api/products/{Product_id}</code></b>
+            <b><code>api/products/{Product}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -901,7 +1340,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-products--Product_id-"
+                              name="Content-Type"                data-endpoint="GETapi-products--Product-"
                value="application/json"
                data-component="header">
     <br>
@@ -912,7 +1351,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-products--Product_id-"
+                              name="Accept"                data-endpoint="GETapi-products--Product-"
                value="application/json"
                data-component="header">
     <br>
@@ -920,15 +1359,15 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
                     <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Product_id</code></b>&nbsp;&nbsp;
+                <b style="line-height: 2;"><code>Product</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="Product_id"                data-endpoint="GETapi-products--Product_id-"
+               step="any"               name="Product"                data-endpoint="GETapi-products--Product-"
                value="1"
                data-component="url">
     <br>
-<p>The ID of the Product. Example: <code>1</code></p>
+<p>Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -1078,7 +1517,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"name\": \"occaecati\"
+    \"name\": \"pariatur\"
 }"
 </code></pre></div>
 
@@ -1094,7 +1533,7 @@ const headers = {
 };
 
 let body = {
-    "name": "occaecati"
+    "name": "pariatur"
 };
 
 fetch(url, {
@@ -1183,12 +1622,382 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="name"                data-endpoint="POSTapi-categories"
-               value="occaecati"
+               value="pariatur"
                data-component="body">
     <br>
-<p>Example: <code>occaecati</code></p>
+<p>Example: <code>pariatur</code></p>
         </div>
         </form>
+
+                    <h2 id="endpoints-POSTapi-contact">Создать заявку ( форма на главной )</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-POSTapi-contact">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost:57000/api/contact" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"name\": \"earum\",
+    \"phone\": \"fugiat\",
+    \"email\": \"grimes.jeramy@example.net\",
+    \"type_id\": 6
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:57000/api/contact"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": "earum",
+    "phone": "fugiat",
+    "email": "grimes.jeramy@example.net",
+    "type_id": 6
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-contact">
+</span>
+<span id="execution-results-POSTapi-contact" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-contact"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-contact"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-contact" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-contact">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-contact" data-method="POST"
+      data-path="api/contact"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-contact', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-contact"
+                    onclick="tryItOut('POSTapi-contact');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-contact"
+                    onclick="cancelTryOut('POSTapi-contact');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-contact"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/contact</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-contact"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-contact"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="name"                data-endpoint="POSTapi-contact"
+               value="earum"
+               data-component="body">
+    <br>
+<p>Example: <code>earum</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>phone</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="phone"                data-endpoint="POSTapi-contact"
+               value="fugiat"
+               data-component="body">
+    <br>
+<p>Example: <code>fugiat</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="email"                data-endpoint="POSTapi-contact"
+               value="grimes.jeramy@example.net"
+               data-component="body">
+    <br>
+<p>Example: <code>grimes.jeramy@example.net</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>type_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="type_id"                data-endpoint="POSTapi-contact"
+               value="6"
+               data-component="body">
+    <br>
+<p>Example: <code>6</code></p>
+        </div>
+        </form>
+
+                    <h2 id="endpoints-GETapi-contact">Получить список заявок ( форма на главной )</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-GETapi-contact">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost:57000/api/contact?name=%D0%98%D0%B2%D0%B0%D0%BD%D0%BE%D0%B2+%D0%98%D0%B2%D0%B0%D0%BD&amp;phone=89999999999&amp;email=Ivan%40mail.ru&amp;type=1&amp;page=1&amp;limit=10" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:57000/api/contact"
+);
+
+const params = {
+    "name": "Иванов Иван",
+    "phone": "89999999999",
+    "email": "Ivan@mail.ru",
+    "type": "1",
+    "page": "1",
+    "limit": "10",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-contact">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">content-type: text/html; charset=UTF-8
+cache-control: no-cache, private
+x-ratelimit-limit: 60
+x-ratelimit-remaining: 55
+access-control-allow-origin: *
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;"></code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-contact" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-contact"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-contact"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-contact" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-contact">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-contact" data-method="GET"
+      data-path="api/contact"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-contact', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-contact"
+                    onclick="tryItOut('GETapi-contact');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-contact"
+                    onclick="cancelTryOut('GETapi-contact');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-contact"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/contact</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-contact"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-contact"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="name"                data-endpoint="GETapi-contact"
+               value="Иванов Иван"
+               data-component="query">
+    <br>
+<p>. Example: <code>Иванов Иван</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>phone</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="phone"                data-endpoint="GETapi-contact"
+               value="89999999999"
+               data-component="query">
+    <br>
+<p>. Example: <code>89999999999</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="email"                data-endpoint="GETapi-contact"
+               value="Ivan@mail.ru"
+               data-component="query">
+    <br>
+<p>. Example: <code>Ivan@mail.ru</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>type</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="type"                data-endpoint="GETapi-contact"
+               value="1"
+               data-component="query">
+    <br>
+<p>. Example: <code>1</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>page</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="page"                data-endpoint="GETapi-contact"
+               value="1"
+               data-component="query">
+    <br>
+<p>Страница. Example: <code>1</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>limit</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="limit"                data-endpoint="GETapi-contact"
+               value="10"
+               data-component="query">
+    <br>
+<p>Сколько выдать записей. Example: <code>10</code></p>
+            </div>
+                </form>
 
                     <h2 id="endpoints-PUTapi-categories--ProductCategory_id-">Обновить категорию</h2>
 
@@ -1203,18 +2012,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost:57000/api/categories/dolorum" \
+    "http://localhost:57000/api/categories/aperiam" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"name\": \"voluptas\"
+    \"name\": \"optio\"
 }"
 </code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:57000/api/categories/dolorum"
+    "http://localhost:57000/api/categories/aperiam"
 );
 
 const headers = {
@@ -1223,7 +2032,7 @@ const headers = {
 };
 
 let body = {
-    "name": "voluptas"
+    "name": "optio"
 };
 
 fetch(url, {
@@ -1312,10 +2121,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="ProductCategory_id"                data-endpoint="PUTapi-categories--ProductCategory_id-"
-               value="dolorum"
+               value="aperiam"
                data-component="url">
     <br>
-<p>The ID of the ProductCategory. Example: <code>dolorum</code></p>
+<p>The ID of the ProductCategory. Example: <code>aperiam</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -1324,10 +2133,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="name"                data-endpoint="PUTapi-categories--ProductCategory_id-"
-               value="voluptas"
+               value="optio"
                data-component="body">
     <br>
-<p>Example: <code>voluptas</code></p>
+<p>Example: <code>optio</code></p>
         </div>
         </form>
 
@@ -1344,18 +2153,9 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:57000/api/orders" \
+    --get "http://localhost:57000/api/orders?firstName=%D0%98%D0%B2%D0%B0%D0%BD&amp;lastName=%D0%98%D0%B2%D0%B0%D0%BD%D0%BE%D0%B2&amp;email=Ivan%40mail.ru&amp;phone=89999999999&amp;city=%D0%98%D0%B2%D0%B0%D0%BD%D0%BE%D0%B2%D1%81%D0%BA&amp;address=%D1%83%D0%BB%D0%B8%D1%86%D0%B0+%D0%B8%D0%B2%D0%B0%D0%BD%D0%BE%D0%B2%D0%B0+15+%D0%BA%D0%B2%D0%B0%D1%80%D1%82%D0%B8%D1%80%D0%B0+14&amp;page=1&amp;limit=10" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json" \
-    --data "{
-    \"firstName\": \"Шампунь\",
-    \"lastName\": \"Шампунь\",
-    \"email\": \"Шампунь\",
-    \"phone\": \"Шампунь\",
-    \"city\": \"Шампунь\",
-    \"address\": \"Шампунь\"
-}"
-</code></pre></div>
+    --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
@@ -1363,24 +2163,27 @@ You can check the Dev Tools console for debugging information.</code></pre>
     "http://localhost:57000/api/orders"
 );
 
+const params = {
+    "firstName": "Иван",
+    "lastName": "Иванов",
+    "email": "Ivan@mail.ru",
+    "phone": "89999999999",
+    "city": "Ивановск",
+    "address": "улица иванова 15 квартира 14",
+    "page": "1",
+    "limit": "10",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
 const headers = {
     "Content-Type": "application/json",
     "Accept": "application/json",
 };
 
-let body = {
-    "firstName": "Шампунь",
-    "lastName": "Шампунь",
-    "email": "Шампунь",
-    "phone": "Шампунь",
-    "city": "Шампунь",
-    "address": "Шампунь"
-};
-
 fetch(url, {
     method: "GET",
     headers,
-    body: JSON.stringify(body),
 }).then(response =&gt; response.json());</code></pre></div>
 
 </span>
@@ -1396,7 +2199,7 @@ fetch(url, {
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 x-ratelimit-limit: 60
-x-ratelimit-remaining: 55
+x-ratelimit-remaining: 54
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -1472,74 +2275,96 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <br>
 <p>Example: <code>application/json</code></p>
             </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>firstName</code></b>&nbsp;&nbsp;
+                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>firstName</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="firstName"                data-endpoint="GETapi-orders"
-               value="Шампунь"
-               data-component="body">
+               value="Иван"
+               data-component="query">
     <br>
-<p>. Example: <code>Шампунь</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>lastName</code></b>&nbsp;&nbsp;
+<p>. Example: <code>Иван</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>lastName</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="lastName"                data-endpoint="GETapi-orders"
-               value="Шампунь"
-               data-component="body">
+               value="Иванов"
+               data-component="query">
     <br>
-<p>. Example: <code>Шампунь</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
+<p>. Example: <code>Иванов</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="email"                data-endpoint="GETapi-orders"
-               value="Шампунь"
-               data-component="body">
+               value="Ivan@mail.ru"
+               data-component="query">
     <br>
-<p>. Example: <code>Шампунь</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>phone</code></b>&nbsp;&nbsp;
+<p>. Example: <code>Ivan@mail.ru</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>phone</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="phone"                data-endpoint="GETapi-orders"
-               value="Шампунь"
-               data-component="body">
+               value="89999999999"
+               data-component="query">
     <br>
-<p>. Example: <code>Шампунь</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>city</code></b>&nbsp;&nbsp;
+<p>. Example: <code>89999999999</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>city</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="city"                data-endpoint="GETapi-orders"
-               value="Шампунь"
-               data-component="body">
+               value="Ивановск"
+               data-component="query">
     <br>
-<p>. Example: <code>Шампунь</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>address</code></b>&nbsp;&nbsp;
+<p>. Example: <code>Ивановск</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>address</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="address"                data-endpoint="GETapi-orders"
-               value="Шампунь"
-               data-component="body">
+               value="улица иванова 15 квартира 14"
+               data-component="query">
     <br>
-<p>. Example: <code>Шампунь</code></p>
-        </div>
-        </form>
+<p>. Example: <code>улица иванова 15 квартира 14</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>page</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="page"                data-endpoint="GETapi-orders"
+               value="1"
+               data-component="query">
+    <br>
+<p>Страница. Example: <code>1</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>limit</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="limit"                data-endpoint="GETapi-orders"
+               value="10"
+               data-component="query">
+    <br>
+<p>Сколько выдать записей. Example: <code>10</code></p>
+            </div>
+                </form>
 
                     <h2 id="endpoints-POSTapi-orders">Создать заказ</h2>
 
@@ -1558,15 +2383,15 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"first_name\": \"soluta\",
-    \"last_name\": \"placeat\",
-    \"email\": \"lavada48@example.com\",
-    \"phone\": \"sint\",
-    \"city\": \"quod\",
-    \"address\": \"ut\",
-    \"delivery_type\": 9,
+    \"first_name\": \"possimus\",
+    \"last_name\": \"est\",
+    \"email\": \"zachery21@example.com\",
+    \"phone\": \"in\",
+    \"city\": \"sint\",
+    \"address\": \"suscipit\",
+    \"delivery_type\": 16,
     \"products\": [
-        \"et\"
+        \"exercitationem\"
     ]
 }"
 </code></pre></div>
@@ -1583,15 +2408,15 @@ const headers = {
 };
 
 let body = {
-    "first_name": "soluta",
-    "last_name": "placeat",
-    "email": "lavada48@example.com",
-    "phone": "sint",
-    "city": "quod",
-    "address": "ut",
-    "delivery_type": 9,
+    "first_name": "possimus",
+    "last_name": "est",
+    "email": "zachery21@example.com",
+    "phone": "in",
+    "city": "sint",
+    "address": "suscipit",
+    "delivery_type": 16,
     "products": [
-        "et"
+        "exercitationem"
     ]
 };
 
@@ -1681,10 +2506,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="first_name"                data-endpoint="POSTapi-orders"
-               value="soluta"
+               value="possimus"
                data-component="body">
     <br>
-<p>Example: <code>soluta</code></p>
+<p>Example: <code>possimus</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>last_name</code></b>&nbsp;&nbsp;
@@ -1692,10 +2517,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="last_name"                data-endpoint="POSTapi-orders"
-               value="placeat"
+               value="est"
                data-component="body">
     <br>
-<p>Example: <code>placeat</code></p>
+<p>Example: <code>est</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
@@ -1703,10 +2528,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="email"                data-endpoint="POSTapi-orders"
-               value="lavada48@example.com"
+               value="zachery21@example.com"
                data-component="body">
     <br>
-<p>Example: <code>lavada48@example.com</code></p>
+<p>Example: <code>zachery21@example.com</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>phone</code></b>&nbsp;&nbsp;
@@ -1714,10 +2539,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="phone"                data-endpoint="POSTapi-orders"
-               value="sint"
+               value="in"
                data-component="body">
     <br>
-<p>Example: <code>sint</code></p>
+<p>Example: <code>in</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>city</code></b>&nbsp;&nbsp;
@@ -1725,10 +2550,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="city"                data-endpoint="POSTapi-orders"
-               value="quod"
+               value="sint"
                data-component="body">
     <br>
-<p>Example: <code>quod</code></p>
+<p>Example: <code>sint</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>address</code></b>&nbsp;&nbsp;
@@ -1736,10 +2561,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="address"                data-endpoint="POSTapi-orders"
-               value="ut"
+               value="suscipit"
                data-component="body">
     <br>
-<p>Example: <code>ut</code></p>
+<p>Example: <code>suscipit</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>delivery_type</code></b>&nbsp;&nbsp;
@@ -1747,10 +2572,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="delivery_type"                data-endpoint="POSTapi-orders"
-               value="9"
+               value="16"
                data-component="body">
     <br>
-<p>Example: <code>9</code></p>
+<p>Example: <code>16</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>products</code></b>&nbsp;&nbsp;
@@ -1767,31 +2592,31 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="endpoints-PUTapi-orders--Order_id--status">Изменить статус заказа</h2>
+                    <h2 id="endpoints-PUTapi-orders--Order--status">Изменить статус заказа</h2>
 
 <p>
 </p>
 
 
 
-<span id="example-requests-PUTapi-orders--Order_id--status">
+<span id="example-requests-PUTapi-orders--Order--status">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost:57000/api/orders/9/status" \
+    "http://localhost:57000/api/orders/19/status" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"status_id\": 5
+    \"status_id\": 13
 }"
 </code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:57000/api/orders/9/status"
+    "http://localhost:57000/api/orders/19/status"
 );
 
 const headers = {
@@ -1800,7 +2625,7 @@ const headers = {
 };
 
 let body = {
-    "status_id": 5
+    "status_id": 13
 };
 
 fetch(url, {
@@ -1811,45 +2636,45 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-PUTapi-orders--Order_id--status">
+<span id="example-responses-PUTapi-orders--Order--status">
 </span>
-<span id="execution-results-PUTapi-orders--Order_id--status" hidden>
+<span id="execution-results-PUTapi-orders--Order--status" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-PUTapi-orders--Order_id--status"></span>:
+                id="execution-response-status-PUTapi-orders--Order--status"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-PUTapi-orders--Order_id--status"
+    <pre class="json"><code id="execution-response-content-PUTapi-orders--Order--status"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-PUTapi-orders--Order_id--status" hidden>
+<span id="execution-error-PUTapi-orders--Order--status" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-PUTapi-orders--Order_id--status">
+    <pre><code id="execution-error-message-PUTapi-orders--Order--status">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-PUTapi-orders--Order_id--status" data-method="PUT"
-      data-path="api/orders/{Order_id}/status"
+<form id="form-PUTapi-orders--Order--status" data-method="PUT"
+      data-path="api/orders/{Order}/status"
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('PUTapi-orders--Order_id--status', this);">
+      onsubmit="event.preventDefault(); executeTryOut('PUTapi-orders--Order--status', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-PUTapi-orders--Order_id--status"
-                    onclick="tryItOut('PUTapi-orders--Order_id--status');">Try it out ⚡
+                    id="btn-tryout-PUTapi-orders--Order--status"
+                    onclick="tryItOut('PUTapi-orders--Order--status');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-PUTapi-orders--Order_id--status"
-                    onclick="cancelTryOut('PUTapi-orders--Order_id--status');" hidden>Cancel 🛑
+                    id="btn-canceltryout-PUTapi-orders--Order--status"
+                    onclick="cancelTryOut('PUTapi-orders--Order--status');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-PUTapi-orders--Order_id--status"
+                    id="btn-executetryout-PUTapi-orders--Order--status"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -1857,7 +2682,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-darkblue">PUT</small>
-            <b><code>api/orders/{Order_id}/status</code></b>
+            <b><code>api/orders/{Order}/status</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -1865,7 +2690,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="PUTapi-orders--Order_id--status"
+                              name="Content-Type"                data-endpoint="PUTapi-orders--Order--status"
                value="application/json"
                data-component="header">
     <br>
@@ -1876,7 +2701,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="PUTapi-orders--Order_id--status"
+                              name="Accept"                data-endpoint="PUTapi-orders--Order--status"
                value="application/json"
                data-component="header">
     <br>
@@ -1884,15 +2709,15 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
                     <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Order_id</code></b>&nbsp;&nbsp;
+                <b style="line-height: 2;"><code>Order</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="Order_id"                data-endpoint="PUTapi-orders--Order_id--status"
-               value="9"
+               step="any"               name="Order"                data-endpoint="PUTapi-orders--Order--status"
+               value="19"
                data-component="url">
     <br>
-<p>The ID of the Order. Example: <code>9</code></p>
+<p>Example: <code>19</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -1900,11 +2725,11 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="status_id"                data-endpoint="PUTapi-orders--Order_id--status"
-               value="5"
+               step="any"               name="status_id"                data-endpoint="PUTapi-orders--Order--status"
+               value="13"
                data-component="body">
     <br>
-<p>Example: <code>5</code></p>
+<p>Example: <code>13</code></p>
         </div>
         </form>
 
@@ -1924,15 +2749,15 @@ You can check the Dev Tools console for debugging information.</code></pre>
     "http://localhost:57000/api/products" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: multipart/form-data" \
-    --form "title=voluptas"\
-    --form "description=Dolor accusantium minima illum enim libero."\
-    --form "result=atque"\
-    --form "Purpose=ex"\
-    --form "price=7"\
-    --form "sizes[][unit]=maxime"\
-    --form "sizes[][value]=nihil"\
-    --form "avatar=@/tmp/phpdwa3pi" \
-    --form "images[]=@/tmp/phpjb9TDZ" </code></pre></div>
+    --form "title=culpa"\
+    --form "description=Reprehenderit ipsam assumenda odit officia deserunt."\
+    --form "result=in"\
+    --form "Purpose=nobis"\
+    --form "price=12"\
+    --form "sizes[][unit]=perferendis"\
+    --form "sizes[][value]=harum"\
+    --form "avatar=@/tmp/phppwXSP1" \
+    --form "images[]=@/tmp/phpixUv0h" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -1946,13 +2771,13 @@ const headers = {
 };
 
 const body = new FormData();
-body.append('title', 'voluptas');
-body.append('description', 'Dolor accusantium minima illum enim libero.');
-body.append('result', 'atque');
-body.append('Purpose', 'ex');
-body.append('price', '7');
-body.append('sizes[][unit]', 'maxime');
-body.append('sizes[][value]', 'nihil');
+body.append('title', 'culpa');
+body.append('description', 'Reprehenderit ipsam assumenda odit officia deserunt.');
+body.append('result', 'in');
+body.append('Purpose', 'nobis');
+body.append('price', '12');
+body.append('sizes[][unit]', 'perferendis');
+body.append('sizes[][value]', 'harum');
 body.append('avatar', document.querySelector('input[name="avatar"]').files[0]);
 body.append('images[]', document.querySelector('input[name="images[]"]').files[0]);
 
@@ -2042,10 +2867,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="title"                data-endpoint="POSTapi-products"
-               value="voluptas"
+               value="culpa"
                data-component="body">
     <br>
-<p>Example: <code>voluptas</code></p>
+<p>Example: <code>culpa</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
@@ -2053,10 +2878,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="description"                data-endpoint="POSTapi-products"
-               value="Dolor accusantium minima illum enim libero."
+               value="Reprehenderit ipsam assumenda odit officia deserunt."
                data-component="body">
     <br>
-<p>Example: <code>Dolor accusantium minima illum enim libero.</code></p>
+<p>Example: <code>Reprehenderit ipsam assumenda odit officia deserunt.</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>result</code></b>&nbsp;&nbsp;
@@ -2064,10 +2889,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="result"                data-endpoint="POSTapi-products"
-               value="atque"
+               value="in"
                data-component="body">
     <br>
-<p>Example: <code>atque</code></p>
+<p>Example: <code>in</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>Purpose</code></b>&nbsp;&nbsp;
@@ -2075,10 +2900,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="Purpose"                data-endpoint="POSTapi-products"
-               value="ex"
+               value="nobis"
                data-component="body">
     <br>
-<p>Example: <code>ex</code></p>
+<p>Example: <code>nobis</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>price</code></b>&nbsp;&nbsp;
@@ -2086,10 +2911,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="price"                data-endpoint="POSTapi-products"
-               value="7"
+               value="12"
                data-component="body">
     <br>
-<p>Example: <code>7</code></p>
+<p>Example: <code>12</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>product_category_id</code></b>&nbsp;&nbsp;
@@ -2111,7 +2936,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Example: <code>/tmp/phpdwa3pi</code></p>
+<p>Must be an image. Example: <code>/tmp/phppwXSP1</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
         <details>
@@ -2128,10 +2953,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="sizes.0.unit"                data-endpoint="POSTapi-products"
-               value="maxime"
+               value="perferendis"
                data-component="body">
     <br>
-<p>Example: <code>maxime</code></p>
+<p>Example: <code>perferendis</code></p>
                     </div>
                                                                 <div style="margin-left: 14px; clear: unset;">
                         <b style="line-height: 2;"><code>value</code></b>&nbsp;&nbsp;
@@ -2139,10 +2964,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="sizes.0.value"                data-endpoint="POSTapi-products"
-               value="nihil"
+               value="harum"
                data-component="body">
     <br>
-<p>Example: <code>nihil</code></p>
+<p>Example: <code>harum</code></p>
                     </div>
                                     </details>
         </div>
@@ -2178,8 +3003,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"login\": \"magni\",
-    \"password\": \"`H$Y;&gt;ilrId%\"
+    \"login\": \"quia\",
+    \"password\": \"5:}$XM9Qvb\"
 }"
 </code></pre></div>
 
@@ -2195,8 +3020,8 @@ const headers = {
 };
 
 let body = {
-    "login": "magni",
-    "password": "`H$Y;&gt;ilrId%"
+    "login": "quia",
+    "password": "5:}$XM9Qvb"
 };
 
 fetch(url, {
@@ -2285,10 +3110,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="login"                data-endpoint="POSTapi-tokens-create"
-               value="magni"
+               value="quia"
                data-component="body">
     <br>
-<p>Example: <code>magni</code></p>
+<p>Example: <code>quia</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
@@ -2296,10 +3121,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="password"                data-endpoint="POSTapi-tokens-create"
-               value="`H$Y;>ilrId%"
+               value="5:}$XM9Qvb"
                data-component="body">
     <br>
-<p>Example: <code>`H$Y;&gt;ilrId%</code></p>
+<p>Example: <code>5:}$XM9Qvb</code></p>
         </div>
         </form>
 
