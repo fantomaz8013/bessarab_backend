@@ -87,7 +87,7 @@ class OrderController extends Controller
             file_get_contents("https://api.telegram.org/bot6720731238:AAGcZ4QSSFRVWYrL8BzuRbGYiMRoWQR8oAA/sendMessage?$data");
         }
 
-        return response()->json(["result" => "Ok"]);
+        return response()->json(["result" => ['order_id' => $order->id]]);
     }
 
     /**
