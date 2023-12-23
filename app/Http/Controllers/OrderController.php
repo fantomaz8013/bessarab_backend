@@ -71,14 +71,15 @@ class OrderController extends Controller
 <b>Состав заказа:</b> \n";
 
         $productText = "";
-
+        $allPrice = 0;
         foreach ($order->products as $product)
         {
-            $productText.=$product->title." ". ($product->price * $product->pivot->quantity)."руб. x{$product->pivot->quantity}\n";
+            $productText.=$product->title." (x{$product->pivot->quantity}) ". $product->price ." руб. \n";
+            $allPrice+=$product->price * $product->pivot->quantity;
         }
 
         $text.=$productText;
-
+        $text.="<b>Сумма заказа: </b>" . $allPrice;
         foreach ($telegramUsers as $telegramUser)
         {
             $data = http_build_query([
