@@ -50,7 +50,8 @@ class OrderController extends Controller
         {
             OrderProduct::create([
                 'order_id' => $order->id,
-                'product_id' => $product,
+                'product_id' => $product['id'],
+                'quantity' => $product['quantity']
             ]);
         }
 
@@ -61,7 +62,7 @@ class OrderController extends Controller
             ->get();
 
         $text = "<b>У вас новый заказ #{$order->id} </b>\n
-<b>Заказчик:</b> {$order->first_name} {$order->last_name} \n
+<b>Заказчик:</b> {$order->first_name} \n
 <b>Email Заказчика:</b> {$order->email} \n
 <b>Телефон Заказчика:</b> {$order->phone} \n
 <b>Город Заказчика:</b> {$order->city} \n

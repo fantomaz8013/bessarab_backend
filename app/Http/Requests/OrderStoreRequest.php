@@ -22,9 +22,9 @@ class OrderStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'products.*' => 'exists:App\Models\Product,id|required',
+            'products.*.id' => 'exists:App\Models\Product,id|required',
+            'products.*.quantity' => 'integer|required',
             'first_name' => 'string|required',
-            'last_name' => 'string|required',
             'email' => 'string|required',
             'phone' => 'string|required',
             'city' => 'string|required',
