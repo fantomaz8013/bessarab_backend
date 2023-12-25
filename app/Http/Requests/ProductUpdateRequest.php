@@ -26,7 +26,7 @@ class ProductUpdateRequest extends FormRequest
             'description' => 'string',
             'result' => 'string',
             'Purpose' => 'string',
-            'price' => 'integer',
+            'price' => 'decimal:2',
             'sizes.*.unit' => 'string',
             'sizes.*.value' => 'string',
             'product_category_id' => 'exists:App\Models\ProductCategory,id',
