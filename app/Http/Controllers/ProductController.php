@@ -46,7 +46,7 @@ class ProductController extends Controller
     public function store(ProductStoreRequest $request)
     {
         $data = $request->validated();
-        var_dump($request->all());
+
         if ($request->hasFile('avatar')) {
             $file = $request->file('avatar');
             $imageName = time().rand(111111, 999999).'.'.$file->extension();
@@ -113,7 +113,7 @@ class ProductController extends Controller
     public function update(ProductUpdateRequest $request, Product $product)
     {
         $data = $request->validated();
-        var_dump($request->all());
+
         if ($request->hasFile('avatar')) {
             $file = $request->file('avatar');
             File::delete($product->avatar_url);
