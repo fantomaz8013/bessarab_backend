@@ -71,6 +71,7 @@ class ProductController extends Controller
                 ProductSize::create([
                     'value' => $size['value'],
                     'unit' => $size['unit'],
+                    'price' => $size['price'],
                     'product_id' => $product->id,
                 ]);
             }
@@ -139,6 +140,7 @@ class ProductController extends Controller
                 ProductSize::create([
                     'value' => $size['value'],
                     'unit' => $size['unit'],
+                    'price' => $size['price'],
                     'product_id' => $product->id,
                 ]);
             }

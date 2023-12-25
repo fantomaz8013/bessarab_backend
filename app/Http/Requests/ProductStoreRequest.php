@@ -28,7 +28,7 @@ class ProductStoreRequest extends FormRequest
             'description' => 'required|string',
             'result' => 'string',
             'Purpose' => 'string',
-            'price' => 'required|integer',
+            'sizes.*.price' => 'decimal:2',
             'sizes.*.unit' => 'string',
             'sizes.*.value' => 'string',
             'product_category_id' => 'exists:App\Models\ProductCategory,id',

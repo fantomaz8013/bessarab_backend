@@ -24,6 +24,7 @@ class OrderStoreRequest extends FormRequest
         return [
             'products.*.id' => 'exists:App\Models\Product,id|required',
             'products.*.quantity' => 'integer|required',
+            'products.*.size_id' => 'exists:App\Models\ProductSize,id|required',
             'first_name' => 'string|required',
             'email' => 'string|required',
             'phone' => 'string|required',

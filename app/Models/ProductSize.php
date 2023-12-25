@@ -14,6 +14,7 @@ class ProductSize extends Model
         'value',
         'unit',
         'product_id',
+        'price',
     ];
     public $timestamps = false;
     public function product(): BelongsTo

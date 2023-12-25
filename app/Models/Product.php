@@ -18,7 +18,6 @@ class Product extends Model
         'description'  ,
         'result'  ,
         'Purpose'  ,
-        'price'  ,
         'avatar_url'  ,
         'product_category_id'  ,
     ];

@@ -8,6 +8,7 @@ use App\Http\Requests\OrderStoreRequest;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
+use App\Models\ProductSize;
 use App\Models\TelegramUser;
 use Illuminate\Http\Request;
 
@@ -58,7 +59,8 @@ class OrderController extends Controller
             OrderProduct::create([
                 'order_id' => $order->id,
                 'product_id' => $product['id'],
-                'quantity' => $product['quantity']
+                'quantity' => $product['quantity'],
+                'product_size_id' => $product['size_id'],
             ]);
         }
 
@@ -80,7 +82,8 @@ class OrderController extends Controller
         $allPrice = 0;
         foreach ($order->products as $product)
         {
-            $productText.=$product->title." (x{$product->pivot->quantity}) ". $product->price ." руб. \n";
+            $productSize = ProductSize::find($product->pivot->product_size_id)->price;
+            $productText.=$product->title." ".$productSize->value.$productSize->unit." (x{$product->pivot->quantity}) ". $productSize->price ." руб. \n";
             $allPrice+=$product->price * $product->pivot->quantity;
         }
 
