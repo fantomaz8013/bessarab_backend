@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Filters\ProductFilter;
 use App\Http\Requests\ProductStoreRequest;
+use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\ProductSize;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -106,18 +108,81 @@ class ProductController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Изменить продукт
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductUpdateRequest $request, Product $product)
     {
-        //
+        $data = $request->validated();
+
+        if ($request->hasFile('avatar')) {
+            $file = $request->file('avatar');
+            File::delete($product->avatar_url);
+            $imageName = time().rand(111111, 999999).'.'.$file->extension();
+            $imagePath = 'storage/img';
+            $file->move(public_path($imagePath), $imageName);
+            $data['avatar_url'] =  $imagePath . '/' . $imageName;
+        }
+
+        $product->update($data);
+
+        $product->save();
+
+        if (isset($data['sizes']))
+        {
+            foreach ($data['sizes'] as $size)
+            {
+                ProductSize::create([
+                    'value' => $size['value'],
+                    'unit' => $size['unit'],
+                    'product_id' => $product->id,
+                ]);
+            }
+        }
+
+        if ($request->hasFile('images'))
+        {
+            $images = $request->file('images');
+            foreach ($images as $file)
+            {
+                $imageName = time().rand(111111, 999999).'.'.$file->extension();
+                $imagePath = 'storage/img';
+                $file->move(public_path($imagePath), $imageName);
+                $image = ProductImage::create([
+                    'product_id' =>  $product->id,
+                    'url' => $imagePath . '/' . $imageName
+                ]);
+            }
+        }
+
+        if (isset($data['delete_images'])) {
+            foreach ($data['delete_images'] as $delete_image) {
+                $productImage = ProductImage::find($delete_image);
+                if (isset($productImage)) {
+                    File::delete($productImage->url);
+                    $productImage->delete();
+                }
+            }
+        }
+
+        if (isset($data['delete_sizes'])) {
+            foreach ($data['delete_sizes'] as $delete_image) {
+                $productSize = ProductSize::find($delete_image);
+                if (isset($productSize)) {
+                    $productSize->delete();
+                }
+            }
+        }
+
+        return response()->json(["result" => "Ok"]);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Удалить продукт
      */
     public function destroy(Product $product)
     {
-        //
+        $product->is_delete = true;
+        $product->save();
+        return response()->json(["result" => "Ok"]);
     }
 }

@@ -23,6 +23,15 @@ class Product extends Model
         'product_category_id'  ,
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('delete', function (Builder $builder) {
+            $builder->where('is_delete',  0);
+        });
+    }
+
     public function scopeFilter(Builder $builder, QueryFilter $filters)
     {
         return $filters->apply($builder);

@@ -29,6 +29,7 @@ Route::post('/webhook', [\App\Http\Controllers\TelegramUserController::class, 'w
 
 Route::get('/telegramuser', [\App\Http\Controllers\TelegramUserController::class, 'index']);
 Route::get('/products', [\App\Http\Controllers\ProductController::class, 'index']);
+Route::delete('/products/{product}', [\App\Http\Controllers\ProductController::class, 'destroy']);
 Route::get('/products/{Product}', [\App\Http\Controllers\ProductController::class, 'show']);
 Route::get('/categories', [\App\Http\Controllers\ProductCategoryController::class, 'index']);
 Route::post('/categories', [\App\Http\Controllers\ProductCategoryController::class, 'store']);
@@ -43,6 +44,7 @@ Route::put('/orders/{Order}/status', [\App\Http\Controllers\OrderController::cla
 
 
 Route::post('/products', [\App\Http\Controllers\ProductController::class, 'store']);
+Route::put('/products/{product}', [\App\Http\Controllers\ProductController::class, 'update']);
 
 /**
  * Получить токен доступа ( для админки )
