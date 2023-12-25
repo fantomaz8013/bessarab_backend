@@ -37,6 +37,10 @@ class Product extends Model
         return $filters->apply($builder);
     }
 
+    public function scopePages(Builder $builder, QueryFilter $filters)
+    {
+        return $filters->apply($builder);
+    }
 
     public function category(): BelongsTo
     {

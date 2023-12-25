@@ -23,12 +23,18 @@ class OrderController extends Controller
      * @queryParam  address string . Example: улица иванова 15 квартира 14
      * @queryParam  page int Страница. Example: 1
      * @queryParam  limit int Сколько выдать записей. Example: 10.
+     * @queryParam  orderByAsc string сортировка по возрастанию
+     * @queryParam  orderByDesc string сортировка по убыванию
      */
     public function index(OrderFilter $filter)
     {
-        return Order::filter($filter)
+        $data =  Order::filter($filter)
             ->with('products')
             ->get();
+
+        $pages = $filter->countPages;
+
+        return response()->json(["result" => $data, "pages" => $pages]);
     }
 
     /**

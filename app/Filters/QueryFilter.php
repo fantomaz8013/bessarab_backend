@@ -15,6 +15,8 @@ abstract class QueryFilter
 
     protected $delimiter = ',';
 
+    public $countPages = 0 ;
+
     public function __construct(Request $request)
     {
         $this->request = $request;
@@ -33,6 +35,9 @@ abstract class QueryFilter
 
         $page = $filters['page'] ?? 1;
         $limit = $filters['limit'] ?? 10;
+        $b = clone $this->builder;
+        $count = count($b->get());
+        $this->countPages = ceil($count / $limit);
         $this->builder->skip(($page - 1) * 10)->take($limit);
 
         return $this->builder;
@@ -41,6 +46,16 @@ abstract class QueryFilter
     public function filters()
     {
         return $this->request->query();
+    }
+
+    public function orderByAsc($order)
+    {
+        return $this->builder->orderBy($order, 'ASC');
+    }
+
+    public function orderByDesc($order)
+    {
+        return $this->builder->orderBy($order, 'DESC');
     }
 
     protected function paramToArray($param)

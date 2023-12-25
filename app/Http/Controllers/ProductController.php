@@ -20,12 +20,17 @@ class ProductController extends Controller
      * @queryParam  size string[] Нужные объемы. Example: ["200", "1000"]
      * @queryParam  page int Страница. Example: 1
      * @queryParam  limit int Сколько выдать записей. Example: 10.
+     * @queryParam  orderByAsc string сортировка по возрастанию
+     * @queryParam  orderByDesc string сортировка по убыванию
      */
     public function index(ProductFilter $filters)
     {
-        return Product::filter($filters)
+        $data =  Product::filter($filters)
             ->with('category','sizes')
             ->get();
+        $pages = $filters->countPages;
+
+        return response()->json(["result" => $data, "pages" => $pages]);
     }
 
     /**

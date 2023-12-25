@@ -39,7 +39,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer baEaP6v8kh3cDZV41ged5f6'
+      - 'Bearer 568cb3gvDZaEaf4kdheP1V6'
     controller: null
     method: null
     route: null
@@ -147,7 +147,7 @@ endpoints:
         name: category
         description: 'Id категории.'
         required: false
-        example: 12
+        example: 9
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -172,6 +172,24 @@ endpoints:
         enumValues: []
         exampleWasSpecified: true
         custom: []
+      orderByAsc:
+        name: orderByAsc
+        description: 'сортировка по возрастанию'
+        required: false
+        example: est
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      orderByDesc:
+        name: orderByDesc
+        description: 'сортировка по убыванию'
+        required: false
+        example: quia
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
       limit:
         name: limit
         description: 'Сколько выдать записей.'
@@ -183,11 +201,13 @@ endpoints:
         custom: []
     cleanQueryParameters:
       title: Шампунь
-      category: 12
+      category: 9
       size:
         - '200'
         - '1000'
       page: 1
+      orderByAsc: est
+      orderByDesc: quia
       limit: 10
     bodyParameters: []
     cleanBodyParameters: []
@@ -197,7 +217,7 @@ endpoints:
         status: 500
         content: |-
           {
-              "message": "SQLSTATE[42S22]: Column not found: 1054 Unknown column 'sizes.value' in 'where clause' (Connection: mysql, SQL: select * from `products` where `title` LIKE %\u0428\u0430\u043c\u043f\u0443\u043d\u044c% and `product_category_id` = 12 and `sizes`.`value` in (200, 1000) and `is_delete` = 0 limit 10 offset 0)",
+              "message": "SQLSTATE[42S22]: Column not found: 1054 Unknown column 'sizes.value' in 'where clause' (Connection: mysql, SQL: select * from `products` where `title` LIKE %\u0428\u0430\u043c\u043f\u0443\u043d\u044c% and `product_category_id` = 9 and `sizes`.`value` in (200, 1000) and `is_delete` = 0 order by `est` asc, `quia` desc limit 10 offset 0)",
               "exception": "Illuminate\\Database\\QueryException",
               "file": "/application/vendor/laravel/framework/src/Illuminate/Database/Connection.php",
               "line": 822,
@@ -260,7 +280,7 @@ endpoints:
                   },
                   {
                       "file": "/application/app/Http/Controllers/ProductController.php",
-                      "line": 28,
+                      "line": 30,
                       "function": "get",
                       "class": "Illuminate\\Database\\Eloquent\\Builder",
                       "type": "->"
@@ -784,7 +804,7 @@ endpoints:
     responses:
       -
         status: 200
-        content: '{"id":4,"title":"nulla","avatar_url":"storage\/img\/1702111807568851.jpg","description":"Mollitia officiis id id eos adipisci aut est.","result":"voluptas","Purpose":"explicabo","price":"19.00","product_category_id":1,"created_at":"2023-12-09T08:50:07.000000Z","updated_at":"2023-12-09T08:50:07.000000Z","is_delete":0,"category":{"id":1,"name":"\u0428\u0430\u043c\u043f\u0443\u043d\u044c"},"images":[{"id":1,"url":"storage\/img\/1702111808545860.jpg","product_id":4},{"id":2,"url":"storage\/img\/1702111808828228.jpg","product_id":4}],"sizes":[]}'
+        content: '{"id":4,"title":"culpa","avatar_url":"storage\/img\/1703494751931637.jpg","description":"Rerum provident ut rem inventore accusantium quia.","result":"harum","Purpose":"omnis","price":"15.00","product_category_id":1,"created_at":"2023-12-09T08:50:07.000000Z","updated_at":"2023-12-25T11:25:14.000000Z","is_delete":0,"category":{"id":1,"name":"\u0428\u0430\u043c\u043f\u0443\u043d\u044c"},"images":[{"id":21,"url":"storage\/img\/1703494694796003.jpg","product_id":4},{"id":23,"url":"storage\/img\/1703494751745470.jpg","product_id":4},{"id":24,"url":"storage\/img\/1703494751644691.jpg","product_id":4},{"id":25,"url":"storage\/img\/1703504455162350.jpg","product_id":4},{"id":26,"url":"storage\/img\/1703504455348053.jpg","product_id":4}],"sizes":[]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -865,13 +885,13 @@ endpoints:
         name: name
         description: ''
         required: true
-        example: repudiandae
+        example: quaerat
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: repudiandae
+      name: quaerat
     fileParameters: []
     responses: []
     responseFields: []
@@ -905,7 +925,7 @@ endpoints:
         name: name
         description: ''
         required: true
-        example: sed
+        example: tenetur
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -914,7 +934,7 @@ endpoints:
         name: phone
         description: ''
         required: true
-        example: voluptas
+        example: dolor
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -923,7 +943,7 @@ endpoints:
         name: email
         description: ''
         required: true
-        example: eleanore65@example.net
+        example: colby.homenick@example.com
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -932,16 +952,16 @@ endpoints:
         name: type_id
         description: ''
         required: true
-        example: 6
+        example: 12
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: sed
-      phone: voluptas
-      email: eleanore65@example.net
-      type_id: 6
+      name: tenetur
+      phone: dolor
+      email: colby.homenick@example.com
+      type_id: 12
     fileParameters: []
     responses: []
     responseFields: []
@@ -1072,13 +1092,13 @@ endpoints:
         name: ProductCategory_id
         description: 'The ID of the ProductCategory.'
         required: true
-        example: occaecati
+        example: magni
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      ProductCategory_id: occaecati
+      ProductCategory_id: magni
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -1086,13 +1106,13 @@ endpoints:
         name: name
         description: ''
         required: true
-        example: eos
+        example: libero
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: eos
+      name: libero
     fileParameters: []
     responses: []
     responseFields: []
@@ -1745,7 +1765,7 @@ endpoints:
         name: first_name
         description: ''
         required: true
-        example: sunt
+        example: placeat
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1754,7 +1774,7 @@ endpoints:
         name: email
         description: ''
         required: true
-        example: doconnell@example.org
+        example: collins.brian@example.com
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1763,7 +1783,7 @@ endpoints:
         name: phone
         description: ''
         required: true
-        example: dolorem
+        example: blanditiis
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1772,7 +1792,7 @@ endpoints:
         name: city
         description: ''
         required: true
-        example: ea
+        example: ut
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1781,7 +1801,7 @@ endpoints:
         name: address
         description: ''
         required: true
-        example: ipsa
+        example: fuga
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1790,7 +1810,7 @@ endpoints:
         name: delivery_type
         description: ''
         required: true
-        example: 13
+        example: 6
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1809,7 +1829,7 @@ endpoints:
         name: 'products[].id'
         description: ''
         required: true
-        example: omnis
+        example: aliquam
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1818,22 +1838,22 @@ endpoints:
         name: 'products[].quantity'
         description: ''
         required: true
-        example: 16
+        example: 13
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      first_name: sunt
-      email: doconnell@example.org
-      phone: dolorem
-      city: ea
-      address: ipsa
-      delivery_type: 13
+      first_name: placeat
+      email: collins.brian@example.com
+      phone: blanditiis
+      city: ut
+      address: fuga
+      delivery_type: 6
       products:
         -
-          id: omnis
-          quantity: 16
+          id: aliquam
+          quantity: 13
     fileParameters: []
     responses: []
     responseFields: []
@@ -1877,13 +1897,13 @@ endpoints:
         name: status_id
         description: ''
         required: true
-        example: 19
+        example: 11
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      status_id: 19
+      status_id: 11
     fileParameters: []
     responses: []
     responseFields: []
@@ -1917,7 +1937,7 @@ endpoints:
         name: title
         description: ''
         required: true
-        example: veniam
+        example: nostrum
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1926,7 +1946,7 @@ endpoints:
         name: description
         description: ''
         required: true
-        example: 'Tempore illum maxime qui eos quo numquam saepe.'
+        example: 'Maiores accusamus ea delectus sint iusto nam.'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1935,7 +1955,7 @@ endpoints:
         name: result
         description: ''
         required: false
-        example: sed
+        example: magni
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1944,7 +1964,7 @@ endpoints:
         name: Purpose
         description: ''
         required: false
-        example: quia
+        example: consequatur
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1953,7 +1973,7 @@ endpoints:
         name: price
         description: ''
         required: true
-        example: 10
+        example: 3
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -1990,7 +2010,7 @@ endpoints:
         name: 'sizes[].unit'
         description: ''
         required: false
-        example: adipisci
+        example: fuga
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1999,7 +2019,7 @@ endpoints:
         name: 'sizes[].value'
         description: ''
         required: false
-        example: voluptatem
+        example: libero
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2015,15 +2035,15 @@ endpoints:
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      title: veniam
-      description: 'Tempore illum maxime qui eos quo numquam saepe.'
-      result: sed
-      Purpose: quia
-      price: 10
+      title: nostrum
+      description: 'Maiores accusamus ea delectus sint iusto nam.'
+      result: magni
+      Purpose: consequatur
+      price: 3
       sizes:
         -
-          unit: adipisci
-          value: voluptatem
+          unit: fuga
+          value: libero
     fileParameters:
       avatar: null
       images:
@@ -2070,7 +2090,7 @@ endpoints:
         name: title
         description: ''
         required: false
-        example: culpa
+        example: sit
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2079,7 +2099,7 @@ endpoints:
         name: description
         description: ''
         required: false
-        example: 'Rerum provident ut rem inventore accusantium quia.'
+        example: 'Impedit omnis omnis voluptate.'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2088,7 +2108,7 @@ endpoints:
         name: result
         description: ''
         required: false
-        example: harum
+        example: iure
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2097,7 +2117,7 @@ endpoints:
         name: Purpose
         description: ''
         required: false
-        example: omnis
+        example: pariatur
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2106,8 +2126,8 @@ endpoints:
         name: price
         description: ''
         required: false
-        example: 15
-        type: integer
+        example: null
+        type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
@@ -2143,7 +2163,7 @@ endpoints:
         name: 'sizes[].unit'
         description: ''
         required: false
-        example: animi
+        example: voluptatem
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2152,7 +2172,7 @@ endpoints:
         name: 'sizes[].value'
         description: ''
         required: false
-        example: quia
+        example: culpa
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2186,15 +2206,14 @@ endpoints:
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      title: culpa
-      description: 'Rerum provident ut rem inventore accusantium quia.'
-      result: harum
-      Purpose: omnis
-      price: 15
+      title: sit
+      description: 'Impedit omnis omnis voluptate.'
+      result: iure
+      Purpose: pariatur
       sizes:
         -
-          unit: animi
-          value: quia
+          unit: voluptatem
+          value: culpa
     fileParameters:
       avatar: null
       images:
@@ -2231,7 +2250,7 @@ endpoints:
         name: login
         description: ''
         required: true
-        example: nihil
+        example: quia
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2240,14 +2259,14 @@ endpoints:
         name: password
         description: ''
         required: true
-        example: "OQ=g!'N$hw/iob;d"
+        example: '>-4Ci\dlUTTX<d'
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      login: nihil
-      password: "OQ=g!'N$hw/iob;d"
+      login: quia
+      password: '>-4Ci\dlUTTX<d'
     fileParameters: []
     responses: []
     responseFields: []
