@@ -64,9 +64,6 @@ class OrderController extends Controller
             ]);
         }
 
-        $order = Order::find($order->id);
-        $order->load('products');
-
         $telegramUsers = TelegramUser::where('is_work', 1)
             ->get();
 
@@ -80,11 +77,16 @@ class OrderController extends Controller
 
         $productText = "";
         $allPrice = 0;
-        foreach ($order->products as $product)
+
+        $p = OrderProduct::where('order_id', $order->id)
+            ->with('product')
+            ->get();
+
+        foreach ($p as $product)
         {
-            $productSize = ProductSize::find($product->pivot->product_size_id);
-            $productText.=$product->title." ".$productSize->value.$productSize->unit." (x{$product->pivot->quantity}) ". $productSize->price ." руб. \n";
-            $allPrice+=$product->price * $product->pivot->quantity;
+            $productSize = ProductSize::find($product->product_size_id);
+            $productText.= $product->product->title." ".$productSize->value.$productSize->unit." (x{$product->quantity}) ". $productSize->price ." руб. \n";
+            $allPrice+=$productSize->price * $product->quantity;
         }
 
         $text.=$productText;
