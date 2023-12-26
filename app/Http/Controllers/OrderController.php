@@ -82,7 +82,7 @@ class OrderController extends Controller
         $allPrice = 0;
         foreach ($order->products as $product)
         {
-            $productSize = ProductSize::find($product->pivot->product_size_id)->price;
+            $productSize = ProductSize::find($product->pivot->product_size_id);
             $productText.=$product->title." ".$productSize->value.$productSize->unit." (x{$product->pivot->quantity}) ". $productSize->price ." руб. \n";
             $allPrice+=$product->price * $product->pivot->quantity;
         }

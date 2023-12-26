@@ -23,6 +23,11 @@ class ProductFilter extends QueryFilter
         return $this->builder->where('product_category_id', $category_id);
     }
 
+    public function line($line_id)
+    {
+        return $this->builder->where('product_line_id', $line_id);
+    }
+
     public function size($category)
     {
         if (!is_array($category)) {

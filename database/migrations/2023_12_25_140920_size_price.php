@@ -16,7 +16,7 @@ return new class extends Migration
         });
 
         Schema::table('order_products', function (Blueprint $table) {
-            $table->unsignedBigInteger('product_size_id')->nullable(false);
+            $table->unsignedBigInteger('product_size_id')->nullable(true);
             $table->foreign('product_size_id')->references('id')->on('product_sizes');
         });
 

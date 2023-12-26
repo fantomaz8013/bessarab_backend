@@ -32,6 +32,9 @@ Route::get('/products', [\App\Http\Controllers\ProductController::class, 'index'
 Route::delete('/products/{product}', [\App\Http\Controllers\ProductController::class, 'destroy']);
 Route::get('/products/{Product}', [\App\Http\Controllers\ProductController::class, 'show']);
 Route::get('/categories', [\App\Http\Controllers\ProductCategoryController::class, 'index']);
+Route::get('/lines', [\App\Http\Controllers\ProductLinesController::class, 'index']);
+Route::post('/lines', [\App\Http\Controllers\ProductLinesController::class, 'store']);
+Route::put('/lines/{productLines}', [\App\Http\Controllers\ProductLinesController::class, 'update']);
 Route::post('/categories', [\App\Http\Controllers\ProductCategoryController::class, 'store']);
 Route::post('/contact', [\App\Http\Controllers\ContactController::class, 'store']);
 Route::get('/contact', [\App\Http\Controllers\ContactController::class, 'index']);

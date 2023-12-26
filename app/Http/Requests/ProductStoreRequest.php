@@ -32,6 +32,7 @@ class ProductStoreRequest extends FormRequest
             'sizes.*.unit' => 'string',
             'sizes.*.value' => 'string',
             'product_category_id' => 'exists:App\Models\ProductCategory,id',
+            'product_line_id' => 'exists:App\Models\ProductLines,id',
             'images.*' => "image|mimes:jpeg,png,jpg",
             'avatar' => "image|mimes:jpeg,png,jpg",
         ];

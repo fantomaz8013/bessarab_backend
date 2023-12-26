@@ -20,6 +20,7 @@ class Product extends Model
         'Purpose'  ,
         'avatar_url'  ,
         'product_category_id'  ,
+        'product_line_id'  ,
     ];
 
     protected static function boot()
