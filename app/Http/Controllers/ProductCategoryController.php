@@ -53,11 +53,13 @@ class ProductCategoryController extends Controller
     /**
      * Обновить категорию
      */
-    public function update(CreateCategoryRequest $request, ProductCategory $productCategory)
+    public function update(CreateCategoryRequest $request, ProductCategory $ProductCategory)
     {
         $data = $request->validated();
-        $category = ProductCategory::find($productCategory->id);
+        $category = ProductCategory::find($ProductCategory->id);
         $category->update($data);
+        $category->save();
+        return response()->json(["result" => "Ok"]);
     }
 
     /**
