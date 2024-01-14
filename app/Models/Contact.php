@@ -16,6 +16,7 @@ class Contact extends Model
         'phone',
         'email',
         'type_id',
+        'description',
     ];
 
     public function scopeFilter(Builder $builder, QueryFilter $filters)
