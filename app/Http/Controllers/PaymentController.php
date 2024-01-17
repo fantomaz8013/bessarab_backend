@@ -48,6 +48,17 @@ class PaymentController extends Controller
         }
     }
 
+    public function cancel(Request $request)
+    {
+        $data = $request->all();
+        if (isset($data['PaymentId']))
+        {
+            $PaymentId = $data['PaymentId'];
+            $this->tinkoffApi->cencelPayment($PaymentId);
+        }
+        return response('OK', 200);
+    }
+
     public function webhook(Request $request)
     {
         $data = $request->all();

@@ -130,6 +130,10 @@ class OrderController extends Controller
         //Получение url для оплаты
         $paymentURL =  $this->paymentService->init($payment, $items, $order->id);
 
+        if(!$paymentURL){
+            throw new \Exception($this->paymentService->error);
+        }
+
         return response()->json(["result" => ['order_id' => $order->id, 'url' => $paymentURL]]);
     }
 
