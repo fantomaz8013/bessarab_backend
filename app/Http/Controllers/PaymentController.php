@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CancelPaymentRequest;
 use App\Http\Requests\TinkoffWebhookRequest;
 use App\Models\Order;
 use App\Services\TinkoffApi;
@@ -16,41 +17,14 @@ class PaymentController extends Controller
         $this->tinkoffApi = $tinkoffApi;
     }
 
-    public function init()
+    /**
+     * Отменить платеж
+     * @param CancelPaymentRequest $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
+     */
+    public function cancel(CancelPaymentRequest $request)
     {
-        $payment = [
-            'OrderId'       => '123456',        //Ваш идентификатор платежа
-            'Amount'        => '100',           //сумма всего платежа в рублях
-            'Language'      => 'ru',            //язык - используется для локализации страницы оплаты
-            'Description'   => 'Some buying',   //описание платежа
-            'Email'         => 'user@email.com',//email покупателя
-            'Phone'         => '89099998877',   //телефон покупателя
-            'Name'          => 'Customer name', //Имя покупателя
-            'Taxation'      => 'usn_income'     //Налогооблажение
-        ];
-
-        //подготовка массива с покупками
-        $items[] = [
-            'Name'  => 'Название товара',
-            'Price' => '100',    //цена товара в рублях
-            'NDS'   => 'vat20',  //НДС
-            'Quantity'   => '1',  //Количество
-        ];
-
-        //Получение url для оплаты
-        $paymentURL =  $this->tinkoffApi->paymentURL($payment, $items);
-
-        if(!$paymentURL){
-            echo($this->tinkoffApi->error);
-        } else {
-            $payment_id = $this->tinkoffApi->payment_id;
-            return $paymentURL;
-        }
-    }
-
-    public function cancel(Request $request)
-    {
-        $data = $request->all();
+        $data = $request->validated();
         if (isset($data['PaymentId']))
         {
             $PaymentId = $data['PaymentId'];
@@ -59,6 +33,11 @@ class PaymentController extends Controller
         return response('OK', 200);
     }
 
+    /**
+     * Веб хук для оплаты
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
+     */
     public function webhook(Request $request)
     {
         $data = $request->all();

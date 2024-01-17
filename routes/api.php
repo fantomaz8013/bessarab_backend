@@ -44,7 +44,6 @@ Route::get('/orders', [\App\Http\Controllers\OrderController::class, 'index']);
 Route::post('/orders', [\App\Http\Controllers\OrderController::class, 'store']);
 Route::put('/orders/{Order}/status', [\App\Http\Controllers\OrderController::class, 'status']);
 
-//Route::post('/payment/init', [\App\Http\Controllers\PaymentController::class, 'init']);
 Route::post('/payment/cancel', [\App\Http\Controllers\PaymentController::class, 'cancel']);
 Route::post('/payment/webhook', [\App\Http\Controllers\PaymentController::class, 'webhook']);
 
