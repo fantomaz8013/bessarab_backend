@@ -48,7 +48,7 @@ class PaymentController extends Controller
         if (isset($data['OrderId']))
         {
             $orderId = $data['OrderId'];
-            $order = Order::where('id', $orderId)->where('payment_token', $data['Token'])->firstOrFail();;
+            $order = Order::find($orderId);
 
             $order->ext_data = json_encode($data);
             $order->save();
