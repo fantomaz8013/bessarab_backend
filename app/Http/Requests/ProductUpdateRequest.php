@@ -25,6 +25,8 @@ class ProductUpdateRequest extends FormRequest
             'title' => 'string',
             'description' => 'string',
             'result' => 'string',
+            'short_name' => 'string',
+            'sort' => 'integer',
             'Purpose' => 'string',
             'sizes.*.unit' => 'string',
             'sizes.*.value' => 'string',

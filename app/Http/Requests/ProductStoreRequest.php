@@ -27,6 +27,8 @@ class ProductStoreRequest extends FormRequest
             'title' => 'required|string',
             'description' => 'required|string',
             'result' => 'string',
+            'short_name' => 'string',
+            'sort' => 'integer',
             'Purpose' => 'string',
             'sizes.*.price' => 'decimal:2',
             'sizes.*.unit' => 'string',
