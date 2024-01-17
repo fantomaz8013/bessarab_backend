@@ -48,20 +48,39 @@ class PaymentController extends Controller
         }
     }
 
-    public function webhook(TinkoffWebhookRequest $request)
+    public function webhook(Request $request)
     {
-        $data = $request->validated();
+        $data = $request->all();
 
-        if (isset($data['orderId']))
+        if (isset($data['OrderId']))
         {
-            $orderId = $data['orderId'];
+            $orderId = $data['OrderId'];
             $order = Order::find($orderId);
 
-            if (isset($data['Success']) && $data['Success'])
+            $order->ext_data = json_encode($data);
+            $order->save();
+
+            if (isset($data['Success']))
             {
-                if (isset($data['Status']) && $data['Status'] == TinkoffApi::ORDER_STATUS_CONFIRMED && $order->status_id != Order::ORDER_STATUS_PAY)
+                if ($data['Success'])
                 {
-                    $order->status_id = Order::ORDER_STATUS_PAY;
+                    if (isset($data['Status']))
+                    {
+                        if ($data['Status'] == TinkoffApi::ORDER_STATUS_CONFIRMED && $order->status_id != Order::ORDER_STATUS_PAY)
+                        {
+                            $order->status_id = Order::ORDER_STATUS_PAY;
+                        }
+                    }
+                }
+                if (!$data['Success'])
+                {
+                    if (isset($data['Status']))
+                    {
+                        if ($data['Status'] == TinkoffApi::ORDER_STATUS_REJECTED)
+                        {
+                            $order->status_id = Order::ORDER_STATUS_REJECT;
+                        }
+                    }
                 }
             }
 

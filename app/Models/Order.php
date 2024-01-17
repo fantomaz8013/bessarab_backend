@@ -30,6 +30,10 @@ class Order extends Model
      * Заказ закрыт
      */
     const ORDER_STATUS_CLOSED = 5;
+    /*
+     * Заказ отклонен
+     */
+    const ORDER_STATUS_REJECT = 6;
     protected $fillable = [
         'first_name',
         'email',

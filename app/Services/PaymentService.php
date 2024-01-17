@@ -10,7 +10,7 @@ class PaymentService
 {
     protected TinkoffApi $tinkoffApi;
 
-    protected $error;
+    public $error;
     protected $response;
     protected $payment_id;
     protected $payment_url;
