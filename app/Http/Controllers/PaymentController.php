@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CancelPaymentRequest;
 use App\Http\Requests\TinkoffWebhookRequest;
 use App\Models\Order;
+use App\Models\OrderProduct;
+use App\Models\ProductSize;
+use App\Models\TelegramUser;
 use App\Services\TinkoffApi;
 use Illuminate\Http\Request;
 
@@ -59,6 +62,7 @@ class PaymentController extends Controller
                         if ($data['Status'] == TinkoffApi::ORDER_STATUS_CONFIRMED && $order->status_id != Order::ORDER_STATUS_PAY)
                         {
                             $order->status_id = Order::ORDER_STATUS_PAY;
+                            $this->sendTelegram($order->id);
                         }
 
                         if ($data['Status'] == TinkoffApi::ORDER_STATUS_REFUNDED)
@@ -87,6 +91,56 @@ class PaymentController extends Controller
             $order->save();
         }
         return response('OK', 200);
+    }
+
+
+    private function sendTelegram($orderId)
+    {
+        $order = Order::find($orderId);
+        $telegramUsers = TelegramUser::where('is_work', 1)
+            ->get();
+
+        $text = "<b>У вас новый заказ #{$order->id} </b>\n
+<b>Заказчик:</b> {$order->first_name} \n
+<b>Статус:</b> Оплачен \n
+<b>Email Заказчика:</b> {$order->email} \n
+<b>Телефон Заказчика:</b> {$order->phone} \n
+<b>Город Заказчика:</b> {$order->city} \n
+<b>Адрес Заказчика:</b> {$order->address} \n
+<b>Состав заказа:</b> \n";
+
+        $productText = "";
+        $allPrice = 0;
+
+        $p = OrderProduct::where('order_id', $order->id)
+            ->with('product')
+            ->get();
+        $items = [];
+        foreach ($p as $product)
+        {
+            $productSize = ProductSize::find($product->product_size_id);
+            $productText.= $product->product->title." ".$productSize->value.$productSize->unit." (x{$product->quantity}) ". $productSize->price ." руб. \n";
+            $allPrice+=$productSize->price * $product->quantity;
+            $items[] = [
+                'Name'  => $product->product->title,
+                'Price' => $productSize->price,    //цена товара в рублях
+                'NDS'   => 'vat20',  //НДС
+                'Quantity'   => $product->quantity,  //Количество
+            ];
+        }
+
+        $text.=$productText;
+        $text.="----------------------------------------\n";
+        $text.="<b>Сумма заказа: </b>" . $allPrice;
+        foreach ($telegramUsers as $telegramUser)
+        {
+            $data = http_build_query([
+                'chat_id' => $telegramUser->chat_id,
+                'text' => $text,
+                'parse_mode' => 'html'
+            ]);
+            file_get_contents("https://api.telegram.org/bot6720731238:AAGcZ4QSSFRVWYrL8BzuRbGYiMRoWQR8oAA/sendMessage?$data");
+        }
     }
 
 }

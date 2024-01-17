@@ -72,18 +72,6 @@ class OrderController extends Controller
             ]);
         }
 
-        $telegramUsers = TelegramUser::where('is_work', 1)
-            ->get();
-
-        $text = "<b>У вас новый заказ #{$order->id} </b>\n
-<b>Заказчик:</b> {$order->first_name} \n
-<b>Email Заказчика:</b> {$order->email} \n
-<b>Телефон Заказчика:</b> {$order->phone} \n
-<b>Город Заказчика:</b> {$order->city} \n
-<b>Адрес Заказчика:</b> {$order->address} \n
-<b>Состав заказа:</b> \n";
-
-        $productText = "";
         $allPrice = 0;
 
         $p = OrderProduct::where('order_id', $order->id)
@@ -93,7 +81,6 @@ class OrderController extends Controller
         foreach ($p as $product)
         {
             $productSize = ProductSize::find($product->product_size_id);
-            $productText.= $product->product->title." ".$productSize->value.$productSize->unit." (x{$product->quantity}) ". $productSize->price ." руб. \n";
             $allPrice+=$productSize->price * $product->quantity;
             $items[] = [
                 'Name'  => $product->product->title,
@@ -101,19 +88,6 @@ class OrderController extends Controller
                 'NDS'   => 'vat20',  //НДС
                 'Quantity'   => $product->quantity,  //Количество
             ];
-        }
-
-        $text.=$productText;
-        $text.="----------------------------------------\n";
-        $text.="<b>Сумма заказа: </b>" . $allPrice;
-        foreach ($telegramUsers as $telegramUser)
-        {
-            $data = http_build_query([
-                'chat_id' => $telegramUser->chat_id,
-                'text' => $text,
-                'parse_mode' => 'html'
-            ]);
-            file_get_contents("https://api.telegram.org/bot6720731238:AAGcZ4QSSFRVWYrL8BzuRbGYiMRoWQR8oAA/sendMessage?$data");
         }
 
         $payment = [
