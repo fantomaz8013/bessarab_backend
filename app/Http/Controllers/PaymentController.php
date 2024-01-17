@@ -53,6 +53,11 @@ class PaymentController extends Controller
             $order->ext_data = json_encode($data);
             $order->save();
 
+            if ($order->payment_id != $data['PaymentId'])
+            {
+                return response('OK', 200);
+            }
+
             if (isset($data['Success']))
             {
                 if ($data['Success'])

@@ -32,6 +32,7 @@ class PaymentService
             $this->payment_id = $this->tinkoffApi->payment_id;
             $order = Order::find($orderId);
             $order->payment_token = $this->tinkoffApi->last_generate_token;
+            $order->payment_id = $this->tinkoffApi->payment_id;
             $order->save();
             return $paymentURL;
         }
