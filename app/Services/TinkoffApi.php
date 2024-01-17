@@ -41,7 +41,7 @@ class TinkoffApi
     public const ORDER_STATUS_REFUNDING = 15;
     public const ORDER_STATUS_ASYNC_REFUNDING = 16;
     public const ORDER_STATUS_PARTIAL_REFUNDED = 17;
-    public const ORDER_STATUS_REFUNDED = 18;
+    public const ORDER_STATUS_REFUNDED = "REFUNDED";
     public const ORDER_STATUS_REJECTED = "REJECTED";
     public const ORDER_STATUS_DEADLINE_EXPIRED = 20;
     public const ORDER_STATUS_UNKNOWN = 21;

@@ -60,6 +60,11 @@ class PaymentController extends Controller
                         {
                             $order->status_id = Order::ORDER_STATUS_PAY;
                         }
+
+                        if ($data['Status'] == TinkoffApi::ORDER_STATUS_REFUNDED)
+                        {
+                            $order->status_id = Order::ORDER_STATUS_REFUNDED;
+                        }
                     }
                 }
                 if (!$data['Success'])

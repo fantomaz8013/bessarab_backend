@@ -34,6 +34,10 @@ class Order extends Model
      * Заказ отклонен
      */
     const ORDER_STATUS_REJECT = 6;
+    /*
+     * Выполнен возврат
+     */
+    const ORDER_STATUS_REFUNDED = 7;
     protected $fillable = [
         'first_name',
         'email',

@@ -21,6 +21,8 @@ class Product extends Model
         'avatar_url'  ,
         'product_category_id'  ,
         'product_line_id'  ,
+        'short_name'  ,
+        'sort'  ,
     ];
 
     protected static function boot()
