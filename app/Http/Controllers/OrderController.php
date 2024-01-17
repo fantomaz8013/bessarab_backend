@@ -61,7 +61,7 @@ class OrderController extends Controller
     public function store(OrderStoreRequest $request)
     {
         $data = $request->validated();
-        DB::transaction(function() use ($data) {
+        return DB::transaction(function() use ($data) {
             $order = Order::create($data);
             $products = $data['products'];
             foreach ($products as $product)
