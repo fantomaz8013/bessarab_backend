@@ -187,7 +187,7 @@ class TinkoffApi
     private function sendRequest($path,  array $args) {
         $args['TerminalKey'] = $this->terminal_id;
         $args['Token']       = $this->generateToken($args);
-
+        $this->last_generate_token = $args['Token'];
         $args = json_encode($args);
 
         if($curl = curl_init()) {
@@ -215,7 +215,7 @@ class TinkoffApi
                     $this->payment_id       = @$json->PaymentId;
                     $this->payment_url      = @$json->PaymentURL;
                     $this->payment_status   = @$json->Status;
-                    $this->last_generate_token = @$json->Token;
+
                     return TRUE;
                 }
             }
