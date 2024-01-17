@@ -12,6 +12,7 @@ use App\Models\ProductSize;
 use App\Models\TelegramUser;
 use App\Services\PaymentService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -60,55 +61,58 @@ class OrderController extends Controller
     public function store(OrderStoreRequest $request)
     {
         $data = $request->validated();
-        $order = Order::create($data);
-        $products = $data['products'];
-        foreach ($products as $product)
-        {
-            OrderProduct::create([
-                'order_id' => $order->id,
-                'product_id' => $product['id'],
-                'quantity' => $product['quantity'],
-                'product_size_id' => $product['size_id'],
-            ]);
-        }
+        DB::transaction(function() use ($data) {
+            $order = Order::create($data);
+            $products = $data['products'];
+            foreach ($products as $product)
+            {
+                OrderProduct::create([
+                    'order_id' => $order->id,
+                    'product_id' => $product['id'],
+                    'quantity' => $product['quantity'],
+                    'product_size_id' => $product['size_id'],
+                ]);
+            }
 
-        $allPrice = 0;
+            $allPrice = 0;
 
-        $p = OrderProduct::where('order_id', $order->id)
-            ->with('product')
-            ->get();
-        $items = [];
-        foreach ($p as $product)
-        {
-            $productSize = ProductSize::find($product->product_size_id);
-            $allPrice+=$productSize->price * $product->quantity;
-            $items[] = [
-                'Name'  => $product->product->title,
-                'Price' => $productSize->price,    //цена товара в рублях
-                'NDS'   => 'vat20',  //НДС
-                'Quantity'   => $product->quantity,  //Количество
+            $p = OrderProduct::where('order_id', $order->id)
+                ->with('product')
+                ->get();
+            $items = [];
+            foreach ($p as $product)
+            {
+                $productSize = ProductSize::find($product->product_size_id);
+                $allPrice+=$productSize->price * $product->quantity;
+                $items[] = [
+                    'Name'  => $product->product->title,
+                    'Price' => $productSize->price,    //цена товара в рублях
+                    'NDS'   => 'vat20',  //НДС
+                    'Quantity'   => $product->quantity,  //Количество
+                ];
+            }
+
+            $payment = [
+                'OrderId'       => $order->id,        //Ваш идентификатор платежа
+                'Amount'        => $allPrice,        //сумма всего платежа в рублях
+                'Language'      => 'ru',            //язык - используется для локализации страницы оплаты
+                'Description'   => 'Оплата заказа на сайте',   //описание платежа
+                'Email'         => $order->email,//email покупателя
+                'Phone'         => $order->phone,   //телефон покупателя
+                'Name'          => $order->first_name, //Имя покупателя
+                'Taxation'      => 'usn_income'     //Налогооблажение
             ];
-        }
 
-        $payment = [
-            'OrderId'       => $order->id,        //Ваш идентификатор платежа
-            'Amount'        => $allPrice,        //сумма всего платежа в рублях
-            'Language'      => 'ru',            //язык - используется для локализации страницы оплаты
-            'Description'   => 'Оплата заказа на сайте',   //описание платежа
-            'Email'         => $order->email,//email покупателя
-            'Phone'         => $order->phone,   //телефон покупателя
-            'Name'          => $order->first_name, //Имя покупателя
-            'Taxation'      => 'usn_income'     //Налогооблажение
-        ];
+            //Получение url для оплаты
+            $paymentURL =  $this->paymentService->init($payment, $items, $order->id);
 
-        //Получение url для оплаты
-        $paymentURL =  $this->paymentService->init($payment, $items, $order->id);
+            if(!$paymentURL){
+                throw new \Exception($this->paymentService->error);
+            }
 
-        if(!$paymentURL){
-            throw new \Exception($this->paymentService->error);
-        }
+            return response()->json(["result" => ['order_id' => $order->id, 'url' => $paymentURL]]);
+        });
 
-        return response()->json(["result" => ['order_id' => $order->id, 'url' => $paymentURL]]);
     }
 
     /**
