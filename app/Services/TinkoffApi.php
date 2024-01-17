@@ -21,6 +21,30 @@ class TinkoffApi
     protected $payment_id;
     protected $payment_url;
     protected $payment_status;
+    public $last_generate_token;
+
+    public const ORDER_STATUS_NEW = 0;
+    public const ORDER_STATUS_CANCELED = 1;
+    public const ORDER_STATUS_PREAUTHORIZING = 2;
+    public const ORDER_STATUS_FORMSHOWED = 3;
+    public const ORDER_STATUS_AUTHORIZING = 4;
+    public const ORDER_STATUS_ThreeDS_CHECKING = 5;
+    public const ORDER_STATUS_ThreeDS_CHECKED = 6;
+    public const ORDER_STATUS_AUTH_FAIL = 7;
+    public const ORDER_STATUS_PAY_CHECKING = 8;
+    public const ORDER_STATUS_AUTHORIZED = 9;
+    public const ORDER_STATUS_REVERSING = 10;
+    public const ORDER_STATUS_REVERSED = 11;
+    public const ORDER_STATUS_CONFIRMING = 12;
+    public const ORDER_STATUS_CONFIRM_CHECKING = 13;
+    public const ORDER_STATUS_CONFIRMED = 14;
+    public const ORDER_STATUS_REFUNDING = 15;
+    public const ORDER_STATUS_ASYNC_REFUNDING = 16;
+    public const ORDER_STATUS_PARTIAL_REFUNDED = 17;
+    public const ORDER_STATUS_REFUNDED = 18;
+    public const ORDER_STATUS_REJECTED = 19;
+    public const ORDER_STATUS_DEADLINE_EXPIRED = 20;
+    public const ORDER_STATUS_UNKNOWN = 21;
 
     /**
      * Inicialize Tinkoff class
@@ -30,7 +54,7 @@ class TinkoffApi
      * @param [string] $secret_key    - acquiring terminal password
      */
     public function __construct() {
-        $this->acquiring_url  = 'https://rest-api-test.tinkoff.ru/v2/';
+        $this->acquiring_url  = 'https://securepay.tinkoff.ru/v2/';
         $this->terminal_id    = env('TINKOFF_TERMINAL');
         $this->secret_key     = env('TINKOFF_SECRET');
         $this->setupUrls();
@@ -83,6 +107,8 @@ class TinkoffApi
             'Amount'        => round($payment['Amount'] * $amount_multiplicator),
             'Language'      => $payment['Language'],
             'Description'   => $payment['Description'],
+            'NotificationURL'   => 'https://germanbessarab.com/api/payment/webhook',
+            'SuccessURL'   => 'https://germanbessarab.com/success?order='.$payment['OrderId'],
             'DATA' => [
                 'Email'     => $payment['Email'],
                 'Phone'     => $payment['Phone'],
@@ -161,6 +187,7 @@ class TinkoffApi
     private function sendRequest($path,  array $args) {
         $args['TerminalKey'] = $this->terminal_id;
         $args['Token']       = $this->generateToken($args);
+        $this->last_generate_token = $args['Token'];
         $args = json_encode($args);
 
         if($curl = curl_init()) {

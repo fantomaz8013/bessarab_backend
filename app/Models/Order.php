@@ -15,17 +15,21 @@ class Order extends Model
      */
     const ORDER_STATUS_TYPE = 1;
     /*
+     * Заказ оплачен
+     */
+    const ORDER_STATUS_PAY = 2;
+    /*
      * Заказ принят
      */
-    const ORDER_STATUS_ACCEPT = 2;
+    const ORDER_STATUS_ACCEPT = 3;
     /*
      * Заказ доставлен
      */
-    const ORDER_STATUS_DELIVERED = 3;
+    const ORDER_STATUS_DELIVERED = 4;
     /*
      * Заказ закрыт
      */
-    const ORDER_STATUS_CLOSED = 4;
+    const ORDER_STATUS_CLOSED = 5;
     protected $fillable = [
         'first_name',
         'email',

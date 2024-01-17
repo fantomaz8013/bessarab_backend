@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TinkoffWebhookRequest;
+use App\Models\Order;
 use App\Services\TinkoffApi;
 use Illuminate\Http\Request;
 
@@ -16,7 +18,6 @@ class PaymentController extends Controller
 
     public function init()
     {
-
         $payment = [
             'OrderId'       => '123456',        //Ваш идентификатор платежа
             'Amount'        => '100',           //сумма всего платежа в рублях
@@ -46,4 +47,32 @@ class PaymentController extends Controller
             return $paymentURL;
         }
     }
+
+    public function webhook(TinkoffWebhookRequest $request)
+    {
+        $data = $request->validated();
+
+        if (isset($data['orderId']))
+        {
+            $orderId = $data['orderId'];
+            $order = Order::find($orderId);
+
+            if (isset($data['Success']) && $data['Success'])
+            {
+                if (isset($data['Status']) && $data['Status'] == TinkoffApi::ORDER_STATUS_CONFIRMED && $order->status_id != Order::ORDER_STATUS_PAY)
+                {
+                    $order->status_id = Order::ORDER_STATUS_PAY;
+                }
+            }
+
+            if (isset($data['Status']))
+            {
+                $order->payment_status = $data['Status'];
+            }
+
+            $order->save();
+        }
+        return response('OK', 200);
+    }
+
 }

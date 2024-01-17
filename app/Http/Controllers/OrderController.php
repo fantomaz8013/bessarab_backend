@@ -10,10 +10,18 @@ use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Models\ProductSize;
 use App\Models\TelegramUser;
+use App\Services\PaymentService;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+    protected PaymentService $paymentService;
+
+    public function __construct(PaymentService $paymentService)
+    {
+        $this->paymentService = $paymentService;
+    }
+
     /**
      * Список заказов
      * @queryParam  firstName string . Example: Иван
@@ -81,12 +89,18 @@ class OrderController extends Controller
         $p = OrderProduct::where('order_id', $order->id)
             ->with('product')
             ->get();
-
+        $items = [];
         foreach ($p as $product)
         {
             $productSize = ProductSize::find($product->product_size_id);
             $productText.= $product->product->title." ".$productSize->value.$productSize->unit." (x{$product->quantity}) ". $productSize->price ." руб. \n";
             $allPrice+=$productSize->price * $product->quantity;
+            $items[] = [
+                'Name'  => $product->product->title,
+                'Price' => $productSize->price,    //цена товара в рублях
+                'NDS'   => 'vat20',  //НДС
+                'Quantity'   => $product->quantity,  //Количество
+            ];
         }
 
         $text.=$productText;
@@ -102,7 +116,21 @@ class OrderController extends Controller
             file_get_contents("https://api.telegram.org/bot6720731238:AAGcZ4QSSFRVWYrL8BzuRbGYiMRoWQR8oAA/sendMessage?$data");
         }
 
-        return response()->json(["result" => ['order_id' => $order->id]]);
+        $payment = [
+            'OrderId'       => $order->id,        //Ваш идентификатор платежа
+            'Amount'        => $allPrice,        //сумма всего платежа в рублях
+            'Language'      => 'ru',            //язык - используется для локализации страницы оплаты
+            'Description'   => 'Оплата заказа на сайте',   //описание платежа
+            'Email'         => $order->email,//email покупателя
+            'Phone'         => $order->phone,   //телефон покупателя
+            'Name'          => $order->first_name, //Имя покупателя
+            'Taxation'      => 'usn_income'     //Налогооблажение
+        ];
+
+        //Получение url для оплаты
+        $paymentURL =  $this->paymentService->init($payment, $items, $order->id);
+
+        return response()->json(["result" => ['order_id' => $order->id, 'url' => $paymentURL]]);
     }
 
     /**
