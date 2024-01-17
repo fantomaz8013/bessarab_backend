@@ -85,7 +85,7 @@ class OrderController extends Controller
                 $productSize = ProductSize::find($product->product_size_id);
                 $allPrice+=$productSize->price * $product->quantity;
                 $items[] = [
-                    'Name'  => $product->product->title,
+                    'Name'  => $product->product->title." ".$productSize->value.$productSize->unit." (x{$product->quantity}) ",
                     'Price' => $productSize->price,    //цена товара в рублях
                     'NDS'   => 'vat20',  //НДС
                     'Quantity'   => $product->quantity,  //Количество
