@@ -175,7 +175,8 @@ class ProductController extends Controller
             foreach ($data['delete_sizes'] as $delete_image) {
                 $productSize = ProductSize::find($delete_image);
                 if (isset($productSize)) {
-                    $productSize->delete();
+                    $productSize->is_delete = true;
+                    $productSize->save();
                 }
             }
         }
