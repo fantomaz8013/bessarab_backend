@@ -102,13 +102,21 @@ class OrderController extends Controller
                 'Name'          => $order->first_name, //Имя покупателя
                 'Taxation'      => 'usn_income'     //Налогооблажение
             ];
+            $paymentURL = "";
+            if (app()->isProduction())
+            {
+                //Получение url для оплаты
+                $paymentURL =  $this->paymentService->init($payment, $items, $order->id);
 
-            //Получение url для оплаты
-            $paymentURL =  $this->paymentService->init($payment, $items, $order->id);
-
-            if(!$paymentURL){
-                throw new \Exception($this->paymentService->error);
+                if(!$paymentURL){
+                    throw new \Exception($this->paymentService->error);
+                }
             }
+            else {
+                $order->status_id = Order::ORDER_STATUS_PAY;
+                $order->save();
+            }
+
 
             return response()->json(["result" => ['order_id' => $order->id, 'url' => $paymentURL]]);
         });
