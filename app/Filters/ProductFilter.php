@@ -20,7 +20,9 @@ class ProductFilter extends QueryFilter
 
     public function category($category_id)
     {
-        return $this->builder->where('product_category_id', $category_id);
+        return $this->builder
+            ->where('product_category_id', $category_id)
+            ->orWhere('additional_product_category_id', $category_id);
     }
 
     public function line($line_id)

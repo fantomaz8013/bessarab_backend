@@ -20,6 +20,8 @@ class Product extends Model
         'Purpose'  ,
         'avatar_url'  ,
         'product_category_id'  ,
+        'additional_product_category_id'  ,
+        'compound'  ,
         'product_line_id'  ,
         'short_name'  ,
         'sort'  ,
@@ -47,6 +49,11 @@ class Product extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(ProductCategory::class, 'product_category_id');
+    }
+
+    public function addCategory(): BelongsTo
+    {
+        return $this->belongsTo(ProductCategory::class, 'additional_product_category_id');
     }
 
     public function line(): BelongsTo
