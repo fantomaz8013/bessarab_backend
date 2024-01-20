@@ -26,7 +26,7 @@ class ProductController extends Controller
     public function index(ProductFilter $filters)
     {
         $data =  Product::filter($filters)
-            ->with('category','sizes')
+            ->with('category','sizes', 'addCategory')
             ->get();
         $pages = $filters->countPages;
 
