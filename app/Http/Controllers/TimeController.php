@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class TimeController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Получить список расписаний
      */
     public function index()
     {
@@ -25,7 +25,7 @@ class TimeController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Создать расписание
      */
     public function store(TimeStoreRequest $request)
     {
@@ -51,7 +51,7 @@ class TimeController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Изменить расписание
      */
     public function update(TimeStoreRequest $request, Time $time)
     {
@@ -62,7 +62,7 @@ class TimeController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Удалить расписание
      */
     public function destroy(Time $time)
     {
