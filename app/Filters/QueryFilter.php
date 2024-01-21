@@ -37,8 +37,8 @@ abstract class QueryFilter
         $limit = $filters['limit'] ?? 10;
         $b = clone $this->builder;
         $count = count($b->get());
-        $this->countPages = round($count / $limit);
-        $this->builder->skip(($page - 1) * 10)->take($limit);
+        $this->countPages = ceil($count / $limit);
+        $this->builder->skip(($page - 1) * $limit)->take($limit);
 
         return $this->builder;
     }
