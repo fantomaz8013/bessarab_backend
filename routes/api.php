@@ -44,6 +44,12 @@ Route::get('/orders', [\App\Http\Controllers\OrderController::class, 'index']);
 Route::post('/orders', [\App\Http\Controllers\OrderController::class, 'store']);
 Route::put('/orders/{Order}/status', [\App\Http\Controllers\OrderController::class, 'status']);
 
+
+Route::get('/times', [\App\Http\Controllers\TimeController::class, 'index']);
+Route::post('/times', [\App\Http\Controllers\TimeController::class, 'store']);
+Route::put('/times/{time}', [\App\Http\Controllers\TimeController::class, 'update']);
+Route::delete('/times/{time}', [\App\Http\Controllers\TimeController::class, 'destroy']);
+
 Route::post('/payment/cancel', [\App\Http\Controllers\PaymentController::class, 'cancel']);
 Route::post('/payment/webhook', [\App\Http\Controllers\PaymentController::class, 'webhook']);
 
