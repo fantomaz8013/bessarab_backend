@@ -66,6 +66,11 @@ class OrderController extends Controller
             $products = $data['products'];
             foreach ($products as $product)
             {
+                $pro = Product::find($product['id']);
+                if ($pro->is_hide)
+                {
+                    throw new \Exception("Товара не существует");
+                }
                 OrderProduct::create([
                     'order_id' => $order->id,
                     'product_id' => $product['id'],

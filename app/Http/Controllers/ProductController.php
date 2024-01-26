@@ -20,6 +20,7 @@ class ProductController extends Controller
      * @queryParam  size string[] Нужные объемы. Example: ["200", "1000"]
      * @queryParam  page int Страница. Example: 1
      * @queryParam  limit int Сколько выдать записей. Example: 10.
+     * @queryParam  hide boolean Сколько выдать записей. Example: true
      * @queryParam  orderByAsc string сортировка по возрастанию
      * @queryParam  orderByDesc string сортировка по убыванию
      */
@@ -190,6 +191,26 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->is_delete = true;
+        $product->save();
+        return response()->json(["result" => "Ok"]);
+    }
+
+    /**
+     * Скрыть продукт
+     */
+    public function hide(Product $product)
+    {
+        $product->is_hide = true;
+        $product->save();
+        return response()->json(["result" => "Ok"]);
+    }
+
+    /**
+     * Убрать из скрытого продукт
+     */
+    public function showing(Product $product)
+    {
+        $product->is_hide = false;
         $product->save();
         return response()->json(["result" => "Ok"]);
     }

@@ -44,6 +44,9 @@ Route::get('/orders', [\App\Http\Controllers\OrderController::class, 'index']);
 Route::post('/orders', [\App\Http\Controllers\OrderController::class, 'store']);
 Route::put('/orders/{Order}/status', [\App\Http\Controllers\OrderController::class, 'status']);
 
+Route::post('/products/{product}/hide', [\App\Http\Controllers\ProductController::class, 'hide']);
+Route::post('/products/{product}/show', [\App\Http\Controllers\ProductController::class, 'showing']);
+
 
 Route::get('/times', [\App\Http\Controllers\TimeController::class, 'index']);
 Route::post('/times', [\App\Http\Controllers\TimeController::class, 'store']);

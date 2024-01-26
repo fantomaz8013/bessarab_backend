@@ -30,6 +30,11 @@ class ProductFilter extends QueryFilter
         return $this->builder->where('product_line_id', $line_id);
     }
 
+    public function hide($hide)
+    {
+        return $this->builder->where('is_hide', $hide);
+    }
+
     public function size($category)
     {
         if (!is_array($category)) {

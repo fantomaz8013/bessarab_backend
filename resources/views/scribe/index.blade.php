@@ -122,8 +122,29 @@
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-PUTapi-orders--Order--status">
                                 <a href="#endpoints-PUTapi-orders--Order--status">Изменить статус заказа</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-payment-init">
-                                <a href="#endpoints-POSTapi-payment-init">POST api/payment/init</a>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-products--product_id--hide">
+                                <a href="#endpoints-POSTapi-products--product_id--hide">Скрыть продукт</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-products--product_id--show">
+                                <a href="#endpoints-POSTapi-products--product_id--show">Убрать из скрытого продукт</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-times">
+                                <a href="#endpoints-GETapi-times">Получить список расписаний</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-times">
+                                <a href="#endpoints-POSTapi-times">Создать расписание</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-PUTapi-times--time_id-">
+                                <a href="#endpoints-PUTapi-times--time_id-">Изменить расписание</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-times--time_id-">
+                                <a href="#endpoints-DELETEapi-times--time_id-">Удалить расписание</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-payment-cancel">
+                                <a href="#endpoints-POSTapi-payment-cancel">Отменить платеж</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-payment-webhook">
+                                <a href="#endpoints-POSTapi-payment-webhook">Веб хук для оплаты</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-products">
                                 <a href="#endpoints-POSTapi-products">Создать продукт</a>
@@ -145,7 +166,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: January 15, 2024</li>
+        <li>Last updated: January 26, 2024</li>
     </ul>
 </div>
 
@@ -561,7 +582,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:57000/api/products?title=%D0%A8%D0%B0%D0%BC%D0%BF%D1%83%D0%BD%D1%8C&amp;category=9&amp;size[]=200&amp;size[]=1000&amp;page=1&amp;limit=10&amp;orderByAsc=enim&amp;orderByDesc=et" \
+    --get "http://localhost:57000/api/products?title=%D0%A8%D0%B0%D0%BC%D0%BF%D1%83%D0%BD%D1%8C&amp;category=7&amp;size[]=200&amp;size[]=1000&amp;page=1&amp;limit=10&amp;hide=1&amp;orderByAsc=sed&amp;orderByDesc=aut" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
@@ -573,13 +594,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 const params = {
     "title": "Шампунь",
-    "category": "9",
+    "category": "7",
     "size[0]": "200",
     "size[1]": "1000",
     "page": "1",
     "limit": "10",
-    "orderByAsc": "enim",
-    "orderByDesc": "et",
+    "hide": "1",
+    "orderByAsc": "sed",
+    "orderByDesc": "aut",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -612,7 +634,7 @@ access-control-allow-origin: *
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;SQLSTATE[42S22]: Column not found: 1054 Unknown column &#039;sizes.value&#039; in &#039;where clause&#039; (Connection: mysql, SQL: select * from `products` where `title` LIKE %Шампунь% and `product_category_id` = 9 and `sizes`.`value` in (200, 1000) and `is_delete` = 0 order by `enim` asc, `et` desc)&quot;,
+    &quot;message&quot;: &quot;SQLSTATE[42S22]: Column not found: 1054 Unknown column &#039;sizes.value&#039; in &#039;where clause&#039; (Connection: mysql, SQL: select * from `products` where (`title` LIKE %Шампунь% and `product_category_id` = 7 or `additional_product_category_id` = 7 and `sizes`.`value` in (200, 1000) and `is_hide` = 1) and `is_delete` = 0 order by `sed` asc, `aut` desc)&quot;,
     &quot;exception&quot;: &quot;Illuminate\\Database\\QueryException&quot;,
     &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Database/Connection.php&quot;,
     &quot;line&quot;: 822,
@@ -675,14 +697,14 @@ access-control-allow-origin: *
         },
         {
             &quot;file&quot;: &quot;/application/app/Filters/QueryFilter.php&quot;,
-            &quot;line&quot;: 39,
+            &quot;line&quot;: 46,
             &quot;function&quot;: &quot;get&quot;,
             &quot;class&quot;: &quot;Illuminate\\Database\\Eloquent\\Builder&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
             &quot;file&quot;: &quot;/application/app/Models/Product.php&quot;,
-            &quot;line&quot;: 37,
+            &quot;line&quot;: 41,
             &quot;function&quot;: &quot;apply&quot;,
             &quot;class&quot;: &quot;App\\Filters\\QueryFilter&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
@@ -745,7 +767,7 @@ access-control-allow-origin: *
         },
         {
             &quot;file&quot;: &quot;/application/app/Http/Controllers/ProductController.php&quot;,
-            &quot;line&quot;: 28,
+            &quot;line&quot;: 29,
             &quot;function&quot;: &quot;__callStatic&quot;,
             &quot;class&quot;: &quot;Illuminate\\Database\\Eloquent\\Model&quot;,
             &quot;type&quot;: &quot;::&quot;
@@ -1268,10 +1290,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="category"                data-endpoint="GETapi-products"
-               value="9"
+               value="7"
                data-component="query">
     <br>
-<p>Id категории. Example: <code>9</code></p>
+<p>Id категории. Example: <code>7</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>size</code></b>&nbsp;&nbsp;
@@ -1309,15 +1331,36 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Сколько выдать записей. Example: <code>10</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>hide</code></b>&nbsp;&nbsp;
+<small>boolean</small>&nbsp;
+<i>optional</i> &nbsp;
+                <label data-endpoint="GETapi-products" style="display: none">
+            <input type="radio" name="hide"
+                   value="1"
+                   data-endpoint="GETapi-products"
+                   data-component="query"             >
+            <code>true</code>
+        </label>
+        <label data-endpoint="GETapi-products" style="display: none">
+            <input type="radio" name="hide"
+                   value="0"
+                   data-endpoint="GETapi-products"
+                   data-component="query"             >
+            <code>false</code>
+        </label>
+    <br>
+<p>Сколько выдать записей. Example: <code>true</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>orderByAsc</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="orderByAsc"                data-endpoint="GETapi-products"
-               value="enim"
+               value="sed"
                data-component="query">
     <br>
-<p>сортировка по возрастанию Example: <code>enim</code></p>
+<p>сортировка по возрастанию Example: <code>sed</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>orderByDesc</code></b>&nbsp;&nbsp;
@@ -1325,10 +1368,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="orderByDesc"                data-endpoint="GETapi-products"
-               value="et"
+               value="aut"
                data-component="query">
     <br>
-<p>сортировка по убыванию Example: <code>et</code></p>
+<p>сортировка по убыванию Example: <code>aut</code></p>
             </div>
                 </form>
 
@@ -1511,9 +1554,14 @@ access-control-allow-origin: *
     &quot;Purpose&quot;: &quot;фцвфцв&quot;,
     &quot;product_category_id&quot;: 1,
     &quot;created_at&quot;: &quot;2023-12-08T21:43:18.000000Z&quot;,
-    &quot;updated_at&quot;: &quot;2023-12-25T08:26:38.000000Z&quot;,
+    &quot;updated_at&quot;: &quot;2024-01-26T13:52:55.000000Z&quot;,
     &quot;is_delete&quot;: 0,
     &quot;product_line_id&quot;: null,
+    &quot;short_name&quot;: null,
+    &quot;sort&quot;: null,
+    &quot;compound&quot;: null,
+    &quot;additional_product_category_id&quot;: null,
+    &quot;is_hide&quot;: 1,
     &quot;category&quot;: {
         &quot;id&quot;: 1,
         &quot;name&quot;: &quot;excepturi&quot;
@@ -1525,7 +1573,8 @@ access-control-allow-origin: *
             &quot;value&quot;: &quot;100&quot;,
             &quot;unit&quot;: &quot;ml&quot;,
             &quot;product_id&quot;: 1,
-            &quot;price&quot;: &quot;100.00&quot;
+            &quot;price&quot;: &quot;100.00&quot;,
+            &quot;is_delete&quot;: 0
         }
     ]
 }</code>
@@ -1884,7 +1933,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"name\": \"ipsam\"
+    \"name\": \"atque\"
 }"
 </code></pre></div>
 
@@ -1900,7 +1949,7 @@ const headers = {
 };
 
 let body = {
-    "name": "ipsam"
+    "name": "atque"
 };
 
 fetch(url, {
@@ -1989,10 +2038,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="name"                data-endpoint="POSTapi-lines"
-               value="ipsam"
+               value="atque"
                data-component="body">
     <br>
-<p>Example: <code>ipsam</code></p>
+<p>Example: <code>atque</code></p>
         </div>
         </form>
 
@@ -2009,18 +2058,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost:57000/api/lines/7" \
+    "http://localhost:57000/api/lines/5" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"name\": \"iste\"
+    \"name\": \"sint\"
 }"
 </code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:57000/api/lines/7"
+    "http://localhost:57000/api/lines/5"
 );
 
 const headers = {
@@ -2029,7 +2078,7 @@ const headers = {
 };
 
 let body = {
-    "name": "iste"
+    "name": "sint"
 };
 
 fetch(url, {
@@ -2118,10 +2167,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="productLines_id"                data-endpoint="PUTapi-lines--productLines_id-"
-               value="7"
+               value="5"
                data-component="url">
     <br>
-<p>The ID of the productLines. Example: <code>7</code></p>
+<p>The ID of the productLines. Example: <code>5</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -2130,10 +2179,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="name"                data-endpoint="PUTapi-lines--productLines_id-"
-               value="iste"
+               value="sint"
                data-component="body">
     <br>
-<p>Example: <code>iste</code></p>
+<p>Example: <code>sint</code></p>
         </div>
         </form>
 
@@ -2154,7 +2203,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"name\": \"amet\"
+    \"name\": \"consequatur\"
 }"
 </code></pre></div>
 
@@ -2170,7 +2219,7 @@ const headers = {
 };
 
 let body = {
-    "name": "amet"
+    "name": "consequatur"
 };
 
 fetch(url, {
@@ -2259,10 +2308,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="name"                data-endpoint="POSTapi-categories"
-               value="amet"
+               value="consequatur"
                data-component="body">
     <br>
-<p>Example: <code>amet</code></p>
+<p>Example: <code>consequatur</code></p>
         </div>
         </form>
 
@@ -2283,11 +2332,11 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"name\": \"tempora\",
-    \"phone\": \"eius\",
-    \"email\": \"donna.muller@example.net\",
-    \"description\": \"Natus sit et in mollitia qui.\",
-    \"type_id\": 20
+    \"name\": \"soluta\",
+    \"phone\": \"optio\",
+    \"email\": \"stokes.misty@example.net\",
+    \"description\": \"Quaerat sint doloremque in.\",
+    \"type_id\": 12
 }"
 </code></pre></div>
 
@@ -2303,11 +2352,11 @@ const headers = {
 };
 
 let body = {
-    "name": "tempora",
-    "phone": "eius",
-    "email": "donna.muller@example.net",
-    "description": "Natus sit et in mollitia qui.",
-    "type_id": 20
+    "name": "soluta",
+    "phone": "optio",
+    "email": "stokes.misty@example.net",
+    "description": "Quaerat sint doloremque in.",
+    "type_id": 12
 };
 
 fetch(url, {
@@ -2396,10 +2445,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="name"                data-endpoint="POSTapi-contact"
-               value="tempora"
+               value="soluta"
                data-component="body">
     <br>
-<p>Example: <code>tempora</code></p>
+<p>Example: <code>soluta</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>phone</code></b>&nbsp;&nbsp;
@@ -2407,10 +2456,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="phone"                data-endpoint="POSTapi-contact"
-               value="eius"
+               value="optio"
                data-component="body">
     <br>
-<p>Example: <code>eius</code></p>
+<p>Example: <code>optio</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
@@ -2418,10 +2467,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="email"                data-endpoint="POSTapi-contact"
-               value="donna.muller@example.net"
+               value="stokes.misty@example.net"
                data-component="body">
     <br>
-<p>Example: <code>donna.muller@example.net</code></p>
+<p>Example: <code>stokes.misty@example.net</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
@@ -2429,10 +2478,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="description"                data-endpoint="POSTapi-contact"
-               value="Natus sit et in mollitia qui."
+               value="Quaerat sint doloremque in."
                data-component="body">
     <br>
-<p>Example: <code>Natus sit et in mollitia qui.</code></p>
+<p>Example: <code>Quaerat sint doloremque in.</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>type_id</code></b>&nbsp;&nbsp;
@@ -2440,10 +2489,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="type_id"                data-endpoint="POSTapi-contact"
-               value="20"
+               value="12"
                data-component="body">
     <br>
-<p>Example: <code>20</code></p>
+<p>Example: <code>12</code></p>
         </div>
         </form>
 
@@ -2666,7 +2715,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"name\": \"quidem\"
+    \"name\": \"ut\"
 }"
 </code></pre></div>
 
@@ -2682,7 +2731,7 @@ const headers = {
 };
 
 let body = {
-    "name": "quidem"
+    "name": "ut"
 };
 
 fetch(url, {
@@ -2783,10 +2832,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="name"                data-endpoint="PUTapi-categories--ProductCategory-"
-               value="quidem"
+               value="ut"
                data-component="body">
     <br>
-<p>Example: <code>quidem</code></p>
+<p>Example: <code>ut</code></p>
         </div>
         </form>
 
@@ -2803,7 +2852,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:57000/api/orders?firstName=%D0%98%D0%B2%D0%B0%D0%BD&amp;lastName=%D0%98%D0%B2%D0%B0%D0%BD%D0%BE%D0%B2&amp;email=Ivan%40mail.ru&amp;phone=89999999999&amp;city=%D0%98%D0%B2%D0%B0%D0%BD%D0%BE%D0%B2%D1%81%D0%BA&amp;address=%D1%83%D0%BB%D0%B8%D1%86%D0%B0+%D0%B8%D0%B2%D0%B0%D0%BD%D0%BE%D0%B2%D0%B0+15+%D0%BA%D0%B2%D0%B0%D1%80%D1%82%D0%B8%D1%80%D0%B0+14&amp;page=1&amp;limit=10&amp;orderByAsc=quia&amp;orderByDesc=odio" \
+    --get "http://localhost:57000/api/orders?firstName=%D0%98%D0%B2%D0%B0%D0%BD&amp;lastName=%D0%98%D0%B2%D0%B0%D0%BD%D0%BE%D0%B2&amp;email=Ivan%40mail.ru&amp;phone=89999999999&amp;city=%D0%98%D0%B2%D0%B0%D0%BD%D0%BE%D0%B2%D1%81%D0%BA&amp;address=%D1%83%D0%BB%D0%B8%D1%86%D0%B0+%D0%B8%D0%B2%D0%B0%D0%BD%D0%BE%D0%B2%D0%B0+15+%D0%BA%D0%B2%D0%B0%D1%80%D1%82%D0%B8%D1%80%D0%B0+14&amp;page=1&amp;limit=10&amp;orderByAsc=excepturi&amp;orderByDesc=cumque" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
@@ -2822,8 +2871,8 @@ const params = {
     "address": "улица иванова 15 квартира 14",
     "page": "1",
     "limit": "10",
-    "orderByAsc": "quia",
-    "orderByDesc": "odio",
+    "orderByAsc": "excepturi",
+    "orderByDesc": "cumque",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -2856,7 +2905,7 @@ access-control-allow-origin: *
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;SQLSTATE[42S22]: Column not found: 1054 Unknown column &#039;last_name&#039; in &#039;where clause&#039; (Connection: mysql, SQL: select * from `orders` where `first_name` LIKE %Иван% and `last_name` LIKE %Иванов% and `email` LIKE %Ivan@mail.ru% and `phone` LIKE %89999999999% and `city` LIKE %Ивановск% and `address` LIKE %улица иванова 15 квартира 14% order by `quia` asc, `odio` desc)&quot;,
+    &quot;message&quot;: &quot;SQLSTATE[42S22]: Column not found: 1054 Unknown column &#039;last_name&#039; in &#039;where clause&#039; (Connection: mysql, SQL: select * from `orders` where `first_name` LIKE %Иван% and `last_name` LIKE %Иванов% and `email` LIKE %Ivan@mail.ru% and `phone` LIKE %89999999999% and `city` LIKE %Ивановск% and `address` LIKE %улица иванова 15 квартира 14% order by `excepturi` asc, `cumque` desc)&quot;,
     &quot;exception&quot;: &quot;Illuminate\\Database\\QueryException&quot;,
     &quot;file&quot;: &quot;/application/vendor/laravel/framework/src/Illuminate/Database/Connection.php&quot;,
     &quot;line&quot;: 822,
@@ -2919,14 +2968,14 @@ access-control-allow-origin: *
         },
         {
             &quot;file&quot;: &quot;/application/app/Filters/QueryFilter.php&quot;,
-            &quot;line&quot;: 39,
+            &quot;line&quot;: 46,
             &quot;function&quot;: &quot;get&quot;,
             &quot;class&quot;: &quot;Illuminate\\Database\\Eloquent\\Builder&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
             &quot;file&quot;: &quot;/application/app/Models/Order.php&quot;,
-            &quot;line&quot;: 40,
+            &quot;line&quot;: 52,
             &quot;function&quot;: &quot;apply&quot;,
             &quot;class&quot;: &quot;App\\Filters\\QueryFilter&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
@@ -2989,7 +3038,7 @@ access-control-allow-origin: *
         },
         {
             &quot;file&quot;: &quot;/application/app/Http/Controllers/OrderController.php&quot;,
-            &quot;line&quot;: 32,
+            &quot;line&quot;: 41,
             &quot;function&quot;: &quot;__callStatic&quot;,
             &quot;class&quot;: &quot;Illuminate\\Database\\Eloquent\\Model&quot;,
             &quot;type&quot;: &quot;::&quot;
@@ -3589,10 +3638,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="orderByAsc"                data-endpoint="GETapi-orders"
-               value="quia"
+               value="excepturi"
                data-component="query">
     <br>
-<p>сортировка по возрастанию Example: <code>quia</code></p>
+<p>сортировка по возрастанию Example: <code>excepturi</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>orderByDesc</code></b>&nbsp;&nbsp;
@@ -3600,10 +3649,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="orderByDesc"                data-endpoint="GETapi-orders"
-               value="odio"
+               value="cumque"
                data-component="query">
     <br>
-<p>сортировка по убыванию Example: <code>odio</code></p>
+<p>сортировка по убыванию Example: <code>cumque</code></p>
             </div>
                 </form>
 
@@ -3624,17 +3673,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"first_name\": \"aut\",
-    \"email\": \"mturner@example.org\",
-    \"phone\": \"nihil\",
-    \"city\": \"id\",
-    \"address\": \"dicta\",
-    \"delivery_type\": 17,
+    \"first_name\": \"optio\",
+    \"email\": \"herzog.nakia@example.org\",
+    \"phone\": \"possimus\",
+    \"city\": \"voluptatibus\",
+    \"address\": \"architecto\",
+    \"delivery_type\": 2,
     \"products\": [
         {
-            \"id\": \"qui\",
-            \"quantity\": 16,
-            \"size_id\": \"aspernatur\"
+            \"id\": \"accusamus\",
+            \"quantity\": 5,
+            \"size_id\": \"voluptate\"
         }
     ]
 }"
@@ -3652,17 +3701,17 @@ const headers = {
 };
 
 let body = {
-    "first_name": "aut",
-    "email": "mturner@example.org",
-    "phone": "nihil",
-    "city": "id",
-    "address": "dicta",
-    "delivery_type": 17,
+    "first_name": "optio",
+    "email": "herzog.nakia@example.org",
+    "phone": "possimus",
+    "city": "voluptatibus",
+    "address": "architecto",
+    "delivery_type": 2,
     "products": [
         {
-            "id": "qui",
-            "quantity": 16,
-            "size_id": "aspernatur"
+            "id": "accusamus",
+            "quantity": 5,
+            "size_id": "voluptate"
         }
     ]
 };
@@ -3753,10 +3802,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="first_name"                data-endpoint="POSTapi-orders"
-               value="aut"
+               value="optio"
                data-component="body">
     <br>
-<p>Example: <code>aut</code></p>
+<p>Example: <code>optio</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
@@ -3764,10 +3813,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="email"                data-endpoint="POSTapi-orders"
-               value="mturner@example.org"
+               value="herzog.nakia@example.org"
                data-component="body">
     <br>
-<p>Example: <code>mturner@example.org</code></p>
+<p>Example: <code>herzog.nakia@example.org</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>phone</code></b>&nbsp;&nbsp;
@@ -3775,10 +3824,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="phone"                data-endpoint="POSTapi-orders"
-               value="nihil"
+               value="possimus"
                data-component="body">
     <br>
-<p>Example: <code>nihil</code></p>
+<p>Example: <code>possimus</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>city</code></b>&nbsp;&nbsp;
@@ -3786,10 +3835,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="city"                data-endpoint="POSTapi-orders"
-               value="id"
+               value="voluptatibus"
                data-component="body">
     <br>
-<p>Example: <code>id</code></p>
+<p>Example: <code>voluptatibus</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>address</code></b>&nbsp;&nbsp;
@@ -3797,10 +3846,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="address"                data-endpoint="POSTapi-orders"
-               value="dicta"
+               value="architecto"
                data-component="body">
     <br>
-<p>Example: <code>dicta</code></p>
+<p>Example: <code>architecto</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>delivery_type</code></b>&nbsp;&nbsp;
@@ -3808,10 +3857,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="delivery_type"                data-endpoint="POSTapi-orders"
-               value="17"
+               value="2"
                data-component="body">
     <br>
-<p>Example: <code>17</code></p>
+<p>Example: <code>2</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
         <details>
@@ -3828,10 +3877,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="products.0.id"                data-endpoint="POSTapi-orders"
-               value="qui"
+               value="accusamus"
                data-component="body">
     <br>
-<p>Example: <code>qui</code></p>
+<p>Example: <code>accusamus</code></p>
                     </div>
                                                                 <div style="margin-left: 14px; clear: unset;">
                         <b style="line-height: 2;"><code>quantity</code></b>&nbsp;&nbsp;
@@ -3839,10 +3888,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="products.0.quantity"                data-endpoint="POSTapi-orders"
-               value="16"
+               value="5"
                data-component="body">
     <br>
-<p>Example: <code>16</code></p>
+<p>Example: <code>5</code></p>
                     </div>
                                                                 <div style="margin-left: 14px; clear: unset;">
                         <b style="line-height: 2;"><code>size_id</code></b>&nbsp;&nbsp;
@@ -3850,10 +3899,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="products.0.size_id"                data-endpoint="POSTapi-orders"
-               value="aspernatur"
+               value="voluptate"
                data-component="body">
     <br>
-<p>Example: <code>aspernatur</code></p>
+<p>Example: <code>voluptate</code></p>
                     </div>
                                     </details>
         </div>
@@ -3876,7 +3925,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"status_id\": 7
+    \"status_id\": 2
 }"
 </code></pre></div>
 
@@ -3892,7 +3941,7 @@ const headers = {
 };
 
 let body = {
-    "status_id": 7
+    "status_id": 2
 };
 
 fetch(url, {
@@ -3993,34 +4042,34 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="status_id"                data-endpoint="PUTapi-orders--Order--status"
-               value="7"
+               value="2"
                data-component="body">
     <br>
-<p>Example: <code>7</code></p>
+<p>Example: <code>2</code></p>
         </div>
         </form>
 
-                    <h2 id="endpoints-POSTapi-payment-init">POST api/payment/init</h2>
+                    <h2 id="endpoints-POSTapi-products--product_id--hide">Скрыть продукт</h2>
 
 <p>
 </p>
 
 
 
-<span id="example-requests-POSTapi-payment-init">
+<span id="example-requests-POSTapi-products--product_id--hide">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:57000/api/payment/init" \
+    "http://localhost:57000/api/products/1/hide" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:57000/api/payment/init"
+    "http://localhost:57000/api/products/1/hide"
 );
 
 const headers = {
@@ -4035,45 +4084,45 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-POSTapi-payment-init">
+<span id="example-responses-POSTapi-products--product_id--hide">
 </span>
-<span id="execution-results-POSTapi-payment-init" hidden>
+<span id="execution-results-POSTapi-products--product_id--hide" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-POSTapi-payment-init"></span>:
+                id="execution-response-status-POSTapi-products--product_id--hide"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-payment-init"
+    <pre class="json"><code id="execution-response-content-POSTapi-products--product_id--hide"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-POSTapi-payment-init" hidden>
+<span id="execution-error-POSTapi-products--product_id--hide" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-POSTapi-payment-init">
+    <pre><code id="execution-error-message-POSTapi-products--product_id--hide">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-POSTapi-payment-init" data-method="POST"
-      data-path="api/payment/init"
+<form id="form-POSTapi-products--product_id--hide" data-method="POST"
+      data-path="api/products/{product_id}/hide"
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('POSTapi-payment-init', this);">
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-products--product_id--hide', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-POSTapi-payment-init"
-                    onclick="tryItOut('POSTapi-payment-init');">Try it out ⚡
+                    id="btn-tryout-POSTapi-products--product_id--hide"
+                    onclick="tryItOut('POSTapi-products--product_id--hide');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-POSTapi-payment-init"
-                    onclick="cancelTryOut('POSTapi-payment-init');" hidden>Cancel 🛑
+                    id="btn-canceltryout-POSTapi-products--product_id--hide"
+                    onclick="cancelTryOut('POSTapi-products--product_id--hide');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-POSTapi-payment-init"
+                    id="btn-executetryout-POSTapi-products--product_id--hide"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -4081,7 +4130,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-black">POST</small>
-            <b><code>api/payment/init</code></b>
+            <b><code>api/products/{product_id}/hide</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -4089,7 +4138,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="POSTapi-payment-init"
+                              name="Content-Type"                data-endpoint="POSTapi-products--product_id--hide"
                value="application/json"
                data-component="header">
     <br>
@@ -4100,7 +4149,942 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="POSTapi-payment-init"
+                              name="Accept"                data-endpoint="POSTapi-products--product_id--hide"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>product_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="product_id"                data-endpoint="POSTapi-products--product_id--hide"
+               value="1"
+               data-component="url">
+    <br>
+<p>The ID of the product. Example: <code>1</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="endpoints-POSTapi-products--product_id--show">Убрать из скрытого продукт</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-POSTapi-products--product_id--show">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost:57000/api/products/1/show" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:57000/api/products/1/show"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-products--product_id--show">
+</span>
+<span id="execution-results-POSTapi-products--product_id--show" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-products--product_id--show"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-products--product_id--show"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-products--product_id--show" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-products--product_id--show">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-products--product_id--show" data-method="POST"
+      data-path="api/products/{product_id}/show"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-products--product_id--show', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-products--product_id--show"
+                    onclick="tryItOut('POSTapi-products--product_id--show');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-products--product_id--show"
+                    onclick="cancelTryOut('POSTapi-products--product_id--show');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-products--product_id--show"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/products/{product_id}/show</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-products--product_id--show"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-products--product_id--show"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>product_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="product_id"                data-endpoint="POSTapi-products--product_id--show"
+               value="1"
+               data-component="url">
+    <br>
+<p>The ID of the product. Example: <code>1</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="endpoints-GETapi-times">Получить список расписаний</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-GETapi-times">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost:57000/api/times" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:57000/api/times"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-times">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+x-ratelimit-limit: 60
+x-ratelimit-remaining: 52
+access-control-allow-origin: *
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">[]</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-times" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-times"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-times"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-times" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-times">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-times" data-method="GET"
+      data-path="api/times"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-times', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-times"
+                    onclick="tryItOut('GETapi-times');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-times"
+                    onclick="cancelTryOut('GETapi-times');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-times"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/times</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-times"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-times"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
+                    <h2 id="endpoints-POSTapi-times">Создать расписание</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-POSTapi-times">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost:57000/api/times" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"city\": \"quia\",
+    \"date\": \"2024-01-26T13:54:23\",
+    \"comment\": \"et\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:57000/api/times"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "city": "quia",
+    "date": "2024-01-26T13:54:23",
+    "comment": "et"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-times">
+</span>
+<span id="execution-results-POSTapi-times" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-times"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-times"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-times" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-times">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-times" data-method="POST"
+      data-path="api/times"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-times', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-times"
+                    onclick="tryItOut('POSTapi-times');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-times"
+                    onclick="cancelTryOut('POSTapi-times');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-times"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/times</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-times"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-times"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>city</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="city"                data-endpoint="POSTapi-times"
+               value="quia"
+               data-component="body">
+    <br>
+<p>Example: <code>quia</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>date</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="date"                data-endpoint="POSTapi-times"
+               value="2024-01-26T13:54:23"
+               data-component="body">
+    <br>
+<p>Must be a valid date. Example: <code>2024-01-26T13:54:23</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>comment</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="comment"                data-endpoint="POSTapi-times"
+               value="et"
+               data-component="body">
+    <br>
+<p>Example: <code>et</code></p>
+        </div>
+        </form>
+
+                    <h2 id="endpoints-PUTapi-times--time_id-">Изменить расписание</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-PUTapi-times--time_id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request PUT \
+    "http://localhost:57000/api/times/20" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"city\": \"consequuntur\",
+    \"date\": \"2024-01-26T13:54:23\",
+    \"comment\": \"autem\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:57000/api/times/20"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "city": "consequuntur",
+    "date": "2024-01-26T13:54:23",
+    "comment": "autem"
+};
+
+fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-PUTapi-times--time_id-">
+</span>
+<span id="execution-results-PUTapi-times--time_id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-PUTapi-times--time_id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-PUTapi-times--time_id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-PUTapi-times--time_id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-PUTapi-times--time_id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-PUTapi-times--time_id-" data-method="PUT"
+      data-path="api/times/{time_id}"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('PUTapi-times--time_id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-PUTapi-times--time_id-"
+                    onclick="tryItOut('PUTapi-times--time_id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-PUTapi-times--time_id-"
+                    onclick="cancelTryOut('PUTapi-times--time_id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-PUTapi-times--time_id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-darkblue">PUT</small>
+            <b><code>api/times/{time_id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="PUTapi-times--time_id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="PUTapi-times--time_id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>time_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="time_id"                data-endpoint="PUTapi-times--time_id-"
+               value="20"
+               data-component="url">
+    <br>
+<p>The ID of the time. Example: <code>20</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>city</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="city"                data-endpoint="PUTapi-times--time_id-"
+               value="consequuntur"
+               data-component="body">
+    <br>
+<p>Example: <code>consequuntur</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>date</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="date"                data-endpoint="PUTapi-times--time_id-"
+               value="2024-01-26T13:54:23"
+               data-component="body">
+    <br>
+<p>Must be a valid date. Example: <code>2024-01-26T13:54:23</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>comment</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="comment"                data-endpoint="PUTapi-times--time_id-"
+               value="autem"
+               data-component="body">
+    <br>
+<p>Example: <code>autem</code></p>
+        </div>
+        </form>
+
+                    <h2 id="endpoints-DELETEapi-times--time_id-">Удалить расписание</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-DELETEapi-times--time_id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request DELETE \
+    "http://localhost:57000/api/times/16" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:57000/api/times/16"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-DELETEapi-times--time_id-">
+</span>
+<span id="execution-results-DELETEapi-times--time_id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-DELETEapi-times--time_id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-DELETEapi-times--time_id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-DELETEapi-times--time_id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-DELETEapi-times--time_id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-DELETEapi-times--time_id-" data-method="DELETE"
+      data-path="api/times/{time_id}"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-times--time_id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-DELETEapi-times--time_id-"
+                    onclick="tryItOut('DELETEapi-times--time_id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-DELETEapi-times--time_id-"
+                    onclick="cancelTryOut('DELETEapi-times--time_id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-DELETEapi-times--time_id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-red">DELETE</small>
+            <b><code>api/times/{time_id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="DELETEapi-times--time_id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="DELETEapi-times--time_id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>time_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="time_id"                data-endpoint="DELETEapi-times--time_id-"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the time. Example: <code>16</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="endpoints-POSTapi-payment-cancel">Отменить платеж</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-POSTapi-payment-cancel">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost:57000/api/payment/cancel" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"PaymentId\": \"quod\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:57000/api/payment/cancel"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "PaymentId": "quod"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-payment-cancel">
+</span>
+<span id="execution-results-POSTapi-payment-cancel" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-payment-cancel"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-payment-cancel"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-payment-cancel" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-payment-cancel">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-payment-cancel" data-method="POST"
+      data-path="api/payment/cancel"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-payment-cancel', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-payment-cancel"
+                    onclick="tryItOut('POSTapi-payment-cancel');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-payment-cancel"
+                    onclick="cancelTryOut('POSTapi-payment-cancel');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-payment-cancel"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/payment/cancel</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-payment-cancel"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-payment-cancel"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>PaymentId</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="PaymentId"                data-endpoint="POSTapi-payment-cancel"
+               value="quod"
+               data-component="body">
+    <br>
+<p>Example: <code>quod</code></p>
+        </div>
+        </form>
+
+                    <h2 id="endpoints-POSTapi-payment-webhook">Веб хук для оплаты</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-POSTapi-payment-webhook">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost:57000/api/payment/webhook" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:57000/api/payment/webhook"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-payment-webhook">
+</span>
+<span id="execution-results-POSTapi-payment-webhook" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-payment-webhook"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-payment-webhook"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-payment-webhook" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-payment-webhook">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-payment-webhook" data-method="POST"
+      data-path="api/payment/webhook"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-payment-webhook', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-payment-webhook"
+                    onclick="tryItOut('POSTapi-payment-webhook');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-payment-webhook"
+                    onclick="cancelTryOut('POSTapi-payment-webhook');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-payment-webhook"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/payment/webhook</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-payment-webhook"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-payment-webhook"
                value="application/json"
                data-component="header">
     <br>
@@ -4124,14 +5108,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
     "http://localhost:57000/api/products" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: multipart/form-data" \
-    --form "title=qui"\
-    --form "description=Laudantium molestiae recusandae ex explicabo cum."\
-    --form "result=tenetur"\
-    --form "Purpose=labore"\
-    --form "sizes[][unit]=minus"\
-    --form "sizes[][value]=qui"\
-    --form "avatar=@/tmp/phpDkASID" \
-    --form "images[]=@/tmp/phpktYekp" </code></pre></div>
+    --form "title=commodi"\
+    --form "description=Vitae voluptatem voluptas provident perspiciatis asperiores quis."\
+    --form "result=aliquid"\
+    --form "short_name=suscipit"\
+    --form "compound=et"\
+    --form "sort=1"\
+    --form "Purpose=at"\
+    --form "sizes[][unit]=nihil"\
+    --form "sizes[][value]=vel"\
+    --form "avatar=@/tmp/phpUFnuOa" \
+    --form "images[]=@/tmp/phpTgUCz0" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -4145,12 +5132,15 @@ const headers = {
 };
 
 const body = new FormData();
-body.append('title', 'qui');
-body.append('description', 'Laudantium molestiae recusandae ex explicabo cum.');
-body.append('result', 'tenetur');
-body.append('Purpose', 'labore');
-body.append('sizes[][unit]', 'minus');
-body.append('sizes[][value]', 'qui');
+body.append('title', 'commodi');
+body.append('description', 'Vitae voluptatem voluptas provident perspiciatis asperiores quis.');
+body.append('result', 'aliquid');
+body.append('short_name', 'suscipit');
+body.append('compound', 'et');
+body.append('sort', '1');
+body.append('Purpose', 'at');
+body.append('sizes[][unit]', 'nihil');
+body.append('sizes[][value]', 'vel');
 body.append('avatar', document.querySelector('input[name="avatar"]').files[0]);
 body.append('images[]', document.querySelector('input[name="images[]"]').files[0]);
 
@@ -4240,10 +5230,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="title"                data-endpoint="POSTapi-products"
-               value="qui"
+               value="commodi"
                data-component="body">
     <br>
-<p>Example: <code>qui</code></p>
+<p>Example: <code>commodi</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
@@ -4251,10 +5241,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="description"                data-endpoint="POSTapi-products"
-               value="Laudantium molestiae recusandae ex explicabo cum."
+               value="Vitae voluptatem voluptas provident perspiciatis asperiores quis."
                data-component="body">
     <br>
-<p>Example: <code>Laudantium molestiae recusandae ex explicabo cum.</code></p>
+<p>Example: <code>Vitae voluptatem voluptas provident perspiciatis asperiores quis.</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>result</code></b>&nbsp;&nbsp;
@@ -4262,10 +5252,43 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="result"                data-endpoint="POSTapi-products"
-               value="tenetur"
+               value="aliquid"
                data-component="body">
     <br>
-<p>Example: <code>tenetur</code></p>
+<p>Example: <code>aliquid</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>short_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="short_name"                data-endpoint="POSTapi-products"
+               value="suscipit"
+               data-component="body">
+    <br>
+<p>Example: <code>suscipit</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>compound</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="compound"                data-endpoint="POSTapi-products"
+               value="et"
+               data-component="body">
+    <br>
+<p>Example: <code>et</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>sort</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="sort"                data-endpoint="POSTapi-products"
+               value="1"
+               data-component="body">
+    <br>
+<p>Example: <code>1</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>Purpose</code></b>&nbsp;&nbsp;
@@ -4273,10 +5296,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="Purpose"                data-endpoint="POSTapi-products"
-               value="labore"
+               value="at"
                data-component="body">
     <br>
-<p>Example: <code>labore</code></p>
+<p>Example: <code>at</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>product_category_id</code></b>&nbsp;&nbsp;
@@ -4284,6 +5307,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="product_category_id"                data-endpoint="POSTapi-products"
+               value=""
+               data-component="body">
+    <br>
+
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>additional_product_category_id</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="additional_product_category_id"                data-endpoint="POSTapi-products"
                value=""
                data-component="body">
     <br>
@@ -4309,7 +5343,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Example: <code>/tmp/phpDkASID</code></p>
+<p>Must be an image. Example: <code>/tmp/phpUFnuOa</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
         <details>
@@ -4337,10 +5371,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="sizes.0.unit"                data-endpoint="POSTapi-products"
-               value="minus"
+               value="nihil"
                data-component="body">
     <br>
-<p>Example: <code>minus</code></p>
+<p>Example: <code>nihil</code></p>
                     </div>
                                                                 <div style="margin-left: 14px; clear: unset;">
                         <b style="line-height: 2;"><code>value</code></b>&nbsp;&nbsp;
@@ -4348,10 +5382,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="sizes.0.value"                data-endpoint="POSTapi-products"
-               value="qui"
+               value="vel"
                data-component="body">
     <br>
-<p>Example: <code>qui</code></p>
+<p>Example: <code>vel</code></p>
                     </div>
                                     </details>
         </div>
@@ -4386,14 +5420,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
     "http://localhost:57000/api/products/1" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "title=soluta"\
-    --form "description=Nulla cum nemo commodi ut."\
-    --form "result=inventore"\
-    --form "Purpose=alias"\
-    --form "sizes[][unit]=et"\
-    --form "sizes[][value]=molestiae"\
-    --form "avatar=@/tmp/phpCfzoyN" \
-    --form "images[]=@/tmp/php1Q9Pgr" </code></pre></div>
+    --form "title=et"\
+    --form "description=Eum nesciunt aut nostrum voluptas."\
+    --form "result=et"\
+    --form "short_name=sapiente"\
+    --form "sort=4"\
+    --form "compound=eaque"\
+    --form "Purpose=non"\
+    --form "sizes[][unit]=consequatur"\
+    --form "sizes[][value]=nihil"\
+    --form "avatar=@/tmp/phpe8Hn9M" \
+    --form "images[]=@/tmp/phpQHYOxU" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -4407,12 +5444,15 @@ const headers = {
 };
 
 const body = new FormData();
-body.append('title', 'soluta');
-body.append('description', 'Nulla cum nemo commodi ut.');
-body.append('result', 'inventore');
-body.append('Purpose', 'alias');
-body.append('sizes[][unit]', 'et');
-body.append('sizes[][value]', 'molestiae');
+body.append('title', 'et');
+body.append('description', 'Eum nesciunt aut nostrum voluptas.');
+body.append('result', 'et');
+body.append('short_name', 'sapiente');
+body.append('sort', '4');
+body.append('compound', 'eaque');
+body.append('Purpose', 'non');
+body.append('sizes[][unit]', 'consequatur');
+body.append('sizes[][value]', 'nihil');
 body.append('avatar', document.querySelector('input[name="avatar"]').files[0]);
 body.append('images[]', document.querySelector('input[name="images[]"]').files[0]);
 
@@ -4514,10 +5554,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="title"                data-endpoint="PUTapi-products--product_id-"
-               value="soluta"
+               value="et"
                data-component="body">
     <br>
-<p>Example: <code>soluta</code></p>
+<p>Example: <code>et</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
@@ -4525,10 +5565,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="description"                data-endpoint="PUTapi-products--product_id-"
-               value="Nulla cum nemo commodi ut."
+               value="Eum nesciunt aut nostrum voluptas."
                data-component="body">
     <br>
-<p>Example: <code>Nulla cum nemo commodi ut.</code></p>
+<p>Example: <code>Eum nesciunt aut nostrum voluptas.</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>result</code></b>&nbsp;&nbsp;
@@ -4536,10 +5576,43 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="result"                data-endpoint="PUTapi-products--product_id-"
-               value="inventore"
+               value="et"
                data-component="body">
     <br>
-<p>Example: <code>inventore</code></p>
+<p>Example: <code>et</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>short_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="short_name"                data-endpoint="PUTapi-products--product_id-"
+               value="sapiente"
+               data-component="body">
+    <br>
+<p>Example: <code>sapiente</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>sort</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="sort"                data-endpoint="PUTapi-products--product_id-"
+               value="4"
+               data-component="body">
+    <br>
+<p>Example: <code>4</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>compound</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="compound"                data-endpoint="PUTapi-products--product_id-"
+               value="eaque"
+               data-component="body">
+    <br>
+<p>Example: <code>eaque</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>Purpose</code></b>&nbsp;&nbsp;
@@ -4547,10 +5620,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="Purpose"                data-endpoint="PUTapi-products--product_id-"
-               value="alias"
+               value="non"
                data-component="body">
     <br>
-<p>Example: <code>alias</code></p>
+<p>Example: <code>non</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>product_category_id</code></b>&nbsp;&nbsp;
@@ -4558,6 +5631,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="product_category_id"                data-endpoint="PUTapi-products--product_id-"
+               value=""
+               data-component="body">
+    <br>
+
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>additional_product_category_id</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="additional_product_category_id"                data-endpoint="PUTapi-products--product_id-"
                value=""
                data-component="body">
     <br>
@@ -4583,7 +5667,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Example: <code>/tmp/phpCfzoyN</code></p>
+<p>Must be an image. Example: <code>/tmp/phpe8Hn9M</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
         <details>
@@ -4600,10 +5684,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="sizes.0.unit"                data-endpoint="PUTapi-products--product_id-"
-               value="et"
+               value="consequatur"
                data-component="body">
     <br>
-<p>Example: <code>et</code></p>
+<p>Example: <code>consequatur</code></p>
                     </div>
                                                                 <div style="margin-left: 14px; clear: unset;">
                         <b style="line-height: 2;"><code>value</code></b>&nbsp;&nbsp;
@@ -4611,10 +5695,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="sizes.0.value"                data-endpoint="PUTapi-products--product_id-"
-               value="molestiae"
+               value="nihil"
                data-component="body">
     <br>
-<p>Example: <code>molestiae</code></p>
+<p>Example: <code>nihil</code></p>
                     </div>
                                                                 <div style="margin-left: 14px; clear: unset;">
                         <b style="line-height: 2;"><code>price</code></b>&nbsp;&nbsp;
@@ -4687,8 +5771,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"login\": \"quod\",
-    \"password\": \"HkvQei`2\\\\.W4}g)\"
+    \"login\": \"qui\",
+    \"password\": \"4CY\\\\&amp;t?&lt;rMQk2)%}\"
 }"
 </code></pre></div>
 
@@ -4704,8 +5788,8 @@ const headers = {
 };
 
 let body = {
-    "login": "quod",
-    "password": "HkvQei`2\\.W4}g)"
+    "login": "qui",
+    "password": "4CY\\&amp;t?&lt;rMQk2)%}"
 };
 
 fetch(url, {
@@ -4794,10 +5878,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="login"                data-endpoint="POSTapi-tokens-create"
-               value="quod"
+               value="qui"
                data-component="body">
     <br>
-<p>Example: <code>quod</code></p>
+<p>Example: <code>qui</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
@@ -4805,10 +5889,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="password"                data-endpoint="POSTapi-tokens-create"
-               value="HkvQei`2\.W4}g)"
+               value="4CY\&t?<rMQk2)%}"
                data-component="body">
     <br>
-<p>Example: <code>HkvQei</code>2.W4}g)`</p>
+<p>Example: <code>4CY\&amp;t?&lt;rMQk2)%}</code></p>
         </div>
         </form>
 
