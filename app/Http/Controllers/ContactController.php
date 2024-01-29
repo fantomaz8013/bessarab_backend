@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Filters\ContactListFilter;
 use App\Http\Requests\ContactRequest;
 use App\Models\Contact;
+use App\Models\TelegramUser;
 use Illuminate\Http\Request;
 
 class ContactController extends Controller
@@ -38,8 +39,43 @@ class ContactController extends Controller
     public function store(ContactRequest $request)
     {
         $data = $request->validated();
-        Contact::create($data);
+        $contact = Contact::create($data);
+        $telegramUsers = TelegramUser::where('is_work', 1)
+            ->get();
+
+        $text = "<b>У вас запрос на сотрудничество </b>\n
+<b>Имя:</b> {$contact->name} \n
+<b>Номер телефона:</b> {$contact->phone} \n
+<b>Email:</b> {$contact->email} \n
+<b>Тип обращения:</b> {$this->getTypeContact($contact->type_id)} \n
+<b>Комментарий:</b>\n{$contact->description}
+";
+        foreach ($telegramUsers as $telegramUser)
+        {
+            $data = http_build_query([
+                'chat_id' => $telegramUser->chat_id,
+                'text' => $text,
+                'parse_mode' => 'html'
+            ]);
+            file_get_contents("https://api.telegram.org/bot6720731238:AAGcZ4QSSFRVWYrL8BzuRbGYiMRoWQR8oAA/sendMessage?$data");
+        }
         return response('Ok', 200);
+    }
+
+
+    private function getTypeContact($type_id)
+    {
+        switch ($type_id)
+        {
+            case 1:
+                return "Оптовые продажи";
+            case 2:
+                return "Салон";
+            case 3:
+                return "Частный мастер";
+            default:
+                return "Другое";
+        }
     }
 
     /**
