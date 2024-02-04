@@ -42,7 +42,14 @@ class TelegramUserController extends Controller
 
         if ($text == '/start')
         {
-            $name = $data['message']['from']['first_name'] . " " . $data['message']['from']['last_name'];
+            if (isset($data['message']['from']['last_name']))
+            {
+                $name = $data['message']['from']['first_name'] . " " . $data['message']['from']['last_name'];
+            }
+            else {
+                $name = $data['message']['from']['first_name'];
+            }
+
             $text = "Привет $name. Теперь вы будете получать заказы с сайта";
             $data = http_build_query([
                 'chat_id' => $chatId,
