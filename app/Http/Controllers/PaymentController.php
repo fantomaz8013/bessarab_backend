@@ -67,7 +67,12 @@ class PaymentController extends Controller
                         if ($data['Status'] == TinkoffApi::ORDER_STATUS_CONFIRMED && $order->status_id != Order::ORDER_STATUS_PAY)
                         {
                             $order->status_id = Order::ORDER_STATUS_PAY;
-                            $this->sendTelegram($order->id);
+                            try {
+                                $this->sendTelegram($order->id);
+                            }
+                            catch (\Exception $ex) {
+
+                            }
                         }
 
                         if ($data['Status'] == TinkoffApi::ORDER_STATUS_REFUNDED)
@@ -94,7 +99,13 @@ class PaymentController extends Controller
             }
 
             $order->save();
+            $data = http_build_query([
+                'chat_id' => '386852571',
+                'text' => json_encode($data)
+            ]);
+            file_get_contents("https://api.telegram.org/bot6720731238:AAGcZ4QSSFRVWYrL8BzuRbGYiMRoWQR8oAA/sendMessage?$data");
         }
+
         return response('OK', 200);
     }
 
