@@ -33,6 +33,7 @@ class ProductUpdateRequest extends FormRequest
             'sizes.*.value' => 'string',
             'sizes.*.price' => 'decimal:2',
             'product_category_id' => 'exists:App\Models\ProductCategory,id',
+            'brand_id' => 'exists:App\Models\Brand,id',
             'additional_product_category_id' => 'exists:App\Models\ProductCategory,id',
             'product_line_id' => 'exists:App\Models\ProductLines,id',
             'images.*' => "image|mimes:jpeg,png,jpg",
