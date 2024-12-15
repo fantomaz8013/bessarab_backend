@@ -40,6 +40,10 @@ Route::post('/contact', [\App\Http\Controllers\ContactController::class, 'store'
 Route::get('/contact', [\App\Http\Controllers\ContactController::class, 'index']);
 Route::put('/categories/{ProductCategory}', [\App\Http\Controllers\ProductCategoryController::class, 'update']);
 
+Route::get('/brands', [\App\Http\Controllers\BrandController::class, 'index']);
+Route::post('/brands', [\App\Http\Controllers\BrandController::class, 'store']);
+Route::put('/brands/{brand}', [\App\Http\Controllers\BrandController::class, 'update']);
+
 Route::get('/orders', [\App\Http\Controllers\OrderController::class, 'index']);
 Route::post('/orders', [\App\Http\Controllers\OrderController::class, 'store']);
 Route::put('/orders/{Order}/status', [\App\Http\Controllers\OrderController::class, 'status']);

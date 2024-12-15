@@ -25,6 +25,12 @@ class ProductFilter extends QueryFilter
             ->orWhere('additional_product_category_id', $category_id);
     }
 
+    public function brand($brand_id)
+    {
+        return $this->builder
+            ->where('brand_id', $brand_id);
+    }
+
     public function line($line_id)
     {
         return $this->builder->where('product_line_id', $line_id);

@@ -25,6 +25,7 @@ class Product extends Model
         'product_line_id'  ,
         'short_name'  ,
         'sort'  ,
+        'brand_id',
     ];
 
     protected static function boot()
@@ -49,6 +50,11 @@ class Product extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(ProductCategory::class, 'product_category_id');
+    }
+
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class, 'brand_id');
     }
 
     public function addCategory(): BelongsTo

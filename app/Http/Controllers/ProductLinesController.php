@@ -13,7 +13,7 @@ class ProductLinesController extends Controller
      */
     public function index()
     {
-       return ProductLines::all();
+       return ProductLines::with('brand')->get();
     }
 
     /**
@@ -30,6 +30,15 @@ class ProductLinesController extends Controller
     public function store(ProductLineStoreRequest $request)
     {
         $data = $request->validated();
+
+        if ($request->hasFile('img')) {
+            $file = $request->file('img');
+            $imageName = time().rand(111111, 999999).'.'.$file->extension();
+            $imagePath = 'storage/img';
+            $file->move(public_path($imagePath), $imageName);
+            $data['img'] =  $imagePath . '/' . $imageName;
+        }
+
         $product = ProductLines::create($data);
         return response()->json(["result" => ['product_line_id' => $product->id]]);
     }
@@ -56,6 +65,15 @@ class ProductLinesController extends Controller
     public function update(ProductLineStoreRequest $request, ProductLines $productLines)
     {
         $data = $request->validated();
+
+        if ($request->hasFile('img')) {
+            $file = $request->file('img');
+            $imageName = time().rand(111111, 999999).'.'.$file->extension();
+            $imagePath = 'storage/img';
+            $file->move(public_path($imagePath), $imageName);
+            $data['img'] =  $imagePath . '/' . $imageName;
+        }
+
         $productLines->update($data);
         $productLines->save();
         return response()->json(["result" => "Ok"]);

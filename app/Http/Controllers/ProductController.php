@@ -17,6 +17,7 @@ class ProductController extends Controller
      * Получить список продуктов
      * @queryParam  title string Название продукта. Example: Шампунь
      * @queryParam  category int Id категории.
+     * @queryParam  brand int Id бренда.
      * @queryParam  size string[] Нужные объемы. Example: ["200", "1000"]
      * @queryParam  page int Страница. Example: 1
      * @queryParam  limit int Сколько выдать записей. Example: 10.
@@ -27,7 +28,7 @@ class ProductController extends Controller
     public function index(ProductFilter $filters)
     {
         $data =  Product::filter($filters)
-            ->with('category','sizes', 'addCategory')
+            ->with('category','sizes', 'addCategory', 'brand')
             ->get();
         $pages = $filters->countPages;
 

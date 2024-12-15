@@ -39,7 +39,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer b1gf6h8aDeavZ5c634dPEkV'
+      - 'Bearer f6gaaZbE5PDkec63841dhvV'
     controller: null
     method: null
     route: null
@@ -100,7 +100,7 @@ endpoints:
     responses:
       -
         status: 200
-        content: '[{"id":1,"chat_id":"386852571","is_work":1,"created_at":"2023-12-21T10:47:41.000000Z","updated_at":"2023-12-21T11:47:42.000000Z","name":"\u0410\u043d\u0434\u0440\u0435\u0439 \u0421\u0435\u043b\u0435\u0446\u043a\u0438\u0439"},{"id":3,"chat_id":"239330395","is_work":1,"created_at":"2023-12-21T16:33:23.000000Z","updated_at":"2023-12-21T16:33:23.000000Z","name":"German Bessarab"}]'
+        content: '[{"id":1,"chat_id":"386852571","is_work":1,"created_at":"2023-12-26T11:45:07.000000Z","updated_at":"2023-12-26T11:45:09.000000Z","name":"test"}]'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -147,7 +147,16 @@ endpoints:
         name: category
         description: 'Id категории.'
         required: false
-        example: 5
+        example: 13
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      brand:
+        name: brand
+        description: 'Id бренда.'
+        required: false
+        example: 2
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -194,7 +203,7 @@ endpoints:
         name: orderByAsc
         description: 'сортировка по возрастанию'
         required: false
-        example: magnam
+        example: tempore
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -203,22 +212,23 @@ endpoints:
         name: orderByDesc
         description: 'сортировка по убыванию'
         required: false
-        example: laborum
+        example: quos
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanQueryParameters:
       title: Шампунь
-      category: 5
+      category: 13
+      brand: 2
       size:
         - '200'
         - '1000'
       page: 1
       limit: 10
       hide: true
-      orderByAsc: magnam
-      orderByDesc: laborum
+      orderByAsc: tempore
+      orderByDesc: quos
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -227,7 +237,7 @@ endpoints:
         status: 500
         content: |-
           {
-              "message": "SQLSTATE[42S22]: Column not found: 1054 Unknown column 'sizes.value' in 'where clause' (Connection: mysql, SQL: select * from `products` where (`title` LIKE %\u0428\u0430\u043c\u043f\u0443\u043d\u044c% and `product_category_id` = 5 or `additional_product_category_id` = 5 and `sizes`.`value` in (200, 1000) and `is_hide` = 1) and `is_delete` = 0 order by `magnam` asc, `laborum` desc)",
+              "message": "SQLSTATE[42S22]: Column not found: 1054 Unknown column 'sizes.value' in 'where clause' (Connection: mysql, SQL: select * from `products` where (`title` LIKE %\u0428\u0430\u043c\u043f\u0443\u043d\u044c% and `product_category_id` = 13 or `additional_product_category_id` = 13 and `brand_id` = 2 and `sizes`.`value` in (200, 1000) and `is_hide` = 1) and `is_delete` = 0 order by `tempore` asc, `quos` desc)",
               "exception": "Illuminate\\Database\\QueryException",
               "file": "/application/vendor/laravel/framework/src/Illuminate/Database/Connection.php",
               "line": 822,
@@ -360,7 +370,7 @@ endpoints:
                   },
                   {
                       "file": "/application/app/Http/Controllers/ProductController.php",
-                      "line": 29,
+                      "line": 30,
                       "function": "__callStatic",
                       "class": "Illuminate\\Database\\Eloquent\\Model",
                       "type": "::"
@@ -829,13 +839,13 @@ endpoints:
         name: product_id
         description: 'The ID of the product.'
         required: true
-        example: 10
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      product_id: 10
+      product_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -869,13 +879,13 @@ endpoints:
         name: Product
         description: ''
         required: true
-        example: 10
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      Product: 10
+      Product: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -884,7 +894,7 @@ endpoints:
     responses:
       -
         status: 200
-        content: '{"id":10,"title":"\u041a\u043e\u043d\u0434\u0438\u0446\u0438\u043e\u043d\u0435\u0440 \u0434\u043b\u044f \u0432\u0441\u0435\u0445 \u0442\u0438\u043f\u043e\u0432 \u0432\u043e\u043b\u043e\u0441 \u00abPARADISE\u00bb","avatar_url":"storage\/img\/1705337198400772.jpg","description":"\u041a\u043e\u043d\u0434\u0438\u0446\u0438\u043e\u043d\u0435\u0440 \u0441 \u043a\u0435\u0440\u0430\u0442\u0438\u043d\u043e\u043c, \u043f\u0440\u043e\u0442\u0435\u0438\u043d\u0430\u043c\u0438 \u043f\u0448\u0435\u043d\u0438\u0446\u044b, \u0441\u043e\u0438, \u0448\u0435\u043b\u043a\u0430 \u0438 \u043a\u043e\u043c\u043f\u043b\u0435\u043a\u0441\u043e\u043c \u043f\u0438\u0442\u0430\u0442\u0435\u043b\u044c\u043d\u044b\u0445 \u043a\u043e\u043c\u043f\u043e\u043d\u0435\u043d\u0442\u043e\u0432\r\n\u0441\u043e\u0437\u0434\u0430\u043d \u0441\u043f\u0435\u0446\u0438\u0430\u043b\u044c\u043d\u043e \u0434\u043b\u044f \u0438\u043d\u0442\u0435\u043d\u0441\u0438\u0432\u043d\u043e\u0433\u043e \u0432\u043e\u0441\u0441\u0442\u0430\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u044f \u0434\u0430\u0436\u0435 \u0441\u0430\u043c\u044b\u0445 \u043f\u043e\u0432\u0440\u0435\u0436\u0434\u0435\u043d\u043d\u044b\u0445 \u0432\u043e\u043b\u043e\u0441. \u041d\u0430\u0434\u0435\u0436\u043d\u043e\r\n\u0437\u0430\u0449\u0438\u0449\u0430\u0435\u0442 \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0443 \u0432\u043e\u043b\u043e\u0441 \u043e\u0442 \u043d\u0435\u0431\u043b\u0430\u0433\u043e\u043f\u0440\u0438\u044f\u0442\u043d\u044b\u0445 \u0444\u0430\u043a\u0442\u043e\u0440\u043e\u0432 \u043e\u043a\u0440\u0443\u0436\u0430\u044e\u0449\u0435\u0439 \u0441\u0440\u0435\u0434\u044b.","result":"\u0410\u043a\u0442\u0438\u0432\u043d\u044b\u0435 \u043a\u043e\u043c\u043f\u043e\u043d\u0435\u043d\u0442\u044b \u0432 \u0441\u043e\u0441\u0442\u0430\u0432\u0435 \u043a\u043e\u043d\u0434\u0438\u0446\u0438\u043e\u043d\u0435\u0440\u0430 \u0441\u043f\u043e\u0441\u043e\u0431\u0441\u0442\u0432\u0443\u044e\u0442 \u0431\u044b\u0441\u0442\u0440\u043e\u043c\u0443 \u0432\u043e\u0441\u0441\u0442\u0430\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u044e \u043f\u043e\u043b\u043e\u0442\u043d\u0430\r\n\u0432\u043e\u043b\u043e\u0441. \u0412\u043e\u043b\u043e\u0441\u044b \u0441\u0442\u0430\u043d\u043e\u0432\u044f\u0442\u0441\u044f \u0437\u0430\u043c\u0435\u0442\u043d\u043e \u0431\u043e\u043b\u0435\u0435 \u043c\u044f\u0433\u043a\u0438\u043c\u0438, \u0443\u043f\u0440\u0443\u0433\u0438\u043c\u0438, \u043f\u043e\u0441\u043b\u0443\u0448\u043d\u044b\u043c\u0438 \u0438 \u0431\u043b\u0435\u0441\u0442\u044f\u0449\u0438\u043c\u0438.","Purpose":"\u0414\u043b\u044f \u0441\u0443\u0445\u0438\u0445, \u043b\u043e\u043c\u043a\u0438\u0445, \u043f\u043e\u0432\u0440\u0435\u0436\u0434\u0435\u043d\u043d\u044b\u0445 \u0438 \u043e\u043a\u0440\u0430\u0448\u0435\u043d\u043d\u044b\u0445 \u0432\u043e\u043b\u043e\u0441","product_category_id":2,"created_at":"2023-12-24T17:29:31.000000Z","updated_at":"2024-01-22T07:49:19.000000Z","is_delete":0,"product_line_id":1,"short_name":"\u00abPARADISE\u00bb","sort":2,"compound":"Aqua, Cetearyl Alcohol, Behentrimonium Methosulfate, Vitis Vinifera (Grape) Seed Oil, Hydrolyzed Silk, Hydrolyzed Keratin, Inulin, Hydrolyzed Wheat Protein, Ceratonia Silique Seed Extract, Hydrolyzed Soy Protein, Zea Mays Starch, Bis-Hydroxy\/Methoxy Amodimethicone, Amodimethicone, C11-15 Pareth-7, Laureth-9, Glycerin, Trideceth-12, Tocopheryl Acetate, Panthenol, Polyquaternium-16, Sodium Benzoate, Potassium Sorbate, Polyquaternium-7, Guar Hydroxylpropyltrimonium Chloride, Fragrance, Methylchloroisothiazolinone, Methylisothiazolinone.","additional_product_category_id":null,"is_hide":0,"category":{"id":2,"name":"\u041a\u043e\u043d\u0434\u0438\u0446\u0438\u043e\u043d\u0435\u0440"},"images":[{"id":18,"url":"storage\/img\/1703438971904050.jpg","product_id":10},{"id":19,"url":"storage\/img\/1703438971351455.jpg","product_id":10}],"sizes":[{"id":28,"value":"250","unit":"\u043c\u043b","product_id":10,"price":"2700.00","is_delete":0}]}'
+        content: '{"id":1,"title":"\u0428\u0430\u043c\u043f\u0443\u043d\u044c","avatar_url":"\u0432\u0444\u0432\u0446","description":"\u0432\u0444\u0446\u0432\u0446","result":"\u0444\u0446\u0432\u0444\u0446","Purpose":"\u0444\u0446\u0432\u0444\u0446\u0432","product_category_id":1,"created_at":"2023-12-08T21:43:18.000000Z","updated_at":"2024-01-26T13:54:39.000000Z","is_delete":0,"product_line_id":null,"short_name":null,"sort":null,"compound":null,"additional_product_category_id":null,"is_hide":0,"brand_id":1,"category":{"id":1,"name":"excepturi"},"images":[],"sizes":[{"id":1,"value":"100","unit":"ml","product_id":1,"price":"100.00","is_delete":0}]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -925,7 +935,7 @@ endpoints:
     responses:
       -
         status: 200
-        content: '[{"id":1,"name":"\u0428\u0430\u043c\u043f\u0443\u043d\u044c"},{"id":2,"name":"\u041a\u043e\u043d\u0434\u0438\u0446\u0438\u043e\u043d\u0435\u0440"},{"id":3,"name":"\u041c\u0430\u0441\u043a\u0430"},{"id":4,"name":"\u0421\u044b\u0432\u043e\u0440\u043e\u0442\u043a\u0430"},{"id":5,"name":"\u041f\u0440\u0430\u0439\u043c\u0435\u0440"},{"id":6,"name":"\u0413\u0435\u043b\u044c \u0434\u043b\u044f \u0434\u0443\u0448\u0430"},{"id":7,"name":"\u0422\u0435\u0440\u043c\u043e\u0437\u0430\u0449\u0438\u0442\u0430"},{"id":8,"name":"\u0421\u043f\u0440\u0435\u0438"}]'
+        content: '[{"id":1,"name":"excepturi"}]'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -966,7 +976,7 @@ endpoints:
     responses:
       -
         status: 200
-        content: '[{"id":1,"name":"PARADISE","created_at":"2023-12-26T20:46:58.000000Z","updated_at":"2023-12-26T20:46:58.000000Z"},{"id":2,"name":"CANAPA","created_at":"2023-12-29T18:50:21.000000Z","updated_at":"2023-12-29T18:50:21.000000Z"},{"id":3,"name":"SILK","created_at":"2023-12-29T18:50:49.000000Z","updated_at":"2023-12-29T18:50:49.000000Z"},{"id":4,"name":"COLOR","created_at":"2023-12-29T18:51:09.000000Z","updated_at":"2023-12-29T18:51:09.000000Z"},{"id":5,"name":"VOLUME","created_at":"2023-12-29T19:03:59.000000Z","updated_at":"2023-12-29T19:03:59.000000Z"},{"id":6,"name":"OIL","created_at":"2023-12-29T19:04:11.000000Z","updated_at":"2023-12-29T19:04:11.000000Z"},{"id":7,"name":"ICE BABY","created_at":"2023-12-29T19:04:25.000000Z","updated_at":"2023-12-29T19:04:25.000000Z"},{"id":8,"name":"CELLOPHANE","created_at":"2024-01-01T22:37:11.000000Z","updated_at":"2024-01-01T22:37:11.000000Z"},{"id":9,"name":"YO","created_at":"2024-01-02T10:29:35.000000Z","updated_at":"2024-01-02T10:29:35.000000Z"}]'
+        content: '[]'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -995,7 +1005,7 @@ endpoints:
       authenticated: false
       custom: []
     headers:
-      Content-Type: application/json
+      Content-Type: multipart/form-data
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
@@ -1006,14 +1016,33 @@ endpoints:
         name: name
         description: ''
         required: true
-        example: deserunt
+        example: id
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
+      brand_id:
+        name: brand_id
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      img:
+        name: img
+        description: 'Must be an image.'
+        required: false
+        example: null
+        type: file
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
     cleanBodyParameters:
-      name: deserunt
-    fileParameters: []
+      name: id
+    fileParameters:
+      img: null
     responses: []
     responseFields: []
     auth: []
@@ -1035,20 +1064,20 @@ endpoints:
       authenticated: false
       custom: []
     headers:
-      Content-Type: application/json
+      Content-Type: multipart/form-data
       Accept: application/json
     urlParameters:
       productLines_id:
         name: productLines_id
         description: 'The ID of the productLines.'
         required: true
-        example: 1
+        example: 19
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      productLines_id: 1
+      productLines_id: 19
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -1056,14 +1085,33 @@ endpoints:
         name: name
         description: ''
         required: true
-        example: quia
+        example: harum
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
+      brand_id:
+        name: brand_id
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      img:
+        name: img
+        description: 'Must be an image.'
+        required: false
+        example: null
+        type: file
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
     cleanBodyParameters:
-      name: quia
-    fileParameters: []
+      name: harum
+    fileParameters:
+      img: null
     responses: []
     responseFields: []
     auth: []
@@ -1096,13 +1144,13 @@ endpoints:
         name: name
         description: ''
         required: true
-        example: eum
+        example: et
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: eum
+      name: et
     fileParameters: []
     responses: []
     responseFields: []
@@ -1136,7 +1184,7 @@ endpoints:
         name: name
         description: ''
         required: true
-        example: velit
+        example: debitis
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1145,7 +1193,7 @@ endpoints:
         name: phone
         description: ''
         required: true
-        example: animi
+        example: harum
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1154,7 +1202,7 @@ endpoints:
         name: email
         description: ''
         required: true
-        example: gbuckridge@example.com
+        example: baylee87@example.org
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1163,7 +1211,7 @@ endpoints:
         name: description
         description: ''
         required: false
-        example: 'Iure error quo vero minus accusantium.'
+        example: 'Ad temporibus soluta voluptatem quaerat.'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1172,17 +1220,17 @@ endpoints:
         name: type_id
         description: ''
         required: true
-        example: 11
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: velit
-      phone: animi
-      email: gbuckridge@example.com
-      description: 'Iure error quo vero minus accusantium.'
-      type_id: 11
+      name: debitis
+      phone: harum
+      email: baylee87@example.org
+      description: 'Ad temporibus soluta voluptatem quaerat.'
+      type_id: 16
     fileParameters: []
     responses: []
     responseFields: []
@@ -1327,13 +1375,144 @@ endpoints:
         name: name
         description: ''
         required: true
-        example: vitae
+        example: nulla
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: vitae
+      name: nulla
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/brands
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Получить список всех брендов'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '[{"id":1,"name":"GERMAN BESSARAB","created_at":null,"updated_at":null},{"id":2,"name":"GET LOW","created_at":null,"updated_at":null}]'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '53'
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/brands
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Создать бренд'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: ''
+        required: true
+        example: ut
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      name: ut
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/brands/{brand_id}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Обновить бренд'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      brand_id:
+        name: brand_id
+        description: 'The ID of the brand.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanUrlParameters:
+      brand_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: ''
+        required: true
+        example: voluptate
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      name: voluptate
     fileParameters: []
     responses: []
     responseFields: []
@@ -1437,7 +1616,7 @@ endpoints:
         name: orderByAsc
         description: 'сортировка по возрастанию'
         required: false
-        example: id
+        example: error
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1446,7 +1625,7 @@ endpoints:
         name: orderByDesc
         description: 'сортировка по убыванию'
         required: false
-        example: pariatur
+        example: cupiditate
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1460,8 +1639,8 @@ endpoints:
       address: 'улица иванова 15 квартира 14'
       page: 1
       limit: 10
-      orderByAsc: id
-      orderByDesc: pariatur
+      orderByAsc: error
+      orderByDesc: cupiditate
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -1470,7 +1649,7 @@ endpoints:
         status: 500
         content: |-
           {
-              "message": "SQLSTATE[42S22]: Column not found: 1054 Unknown column 'last_name' in 'where clause' (Connection: mysql, SQL: select * from `orders` where `first_name` LIKE %\u0418\u0432\u0430\u043d% and `last_name` LIKE %\u0418\u0432\u0430\u043d\u043e\u0432% and `email` LIKE %Ivan@mail.ru% and `phone` LIKE %89999999999% and `city` LIKE %\u0418\u0432\u0430\u043d\u043e\u0432\u0441\u043a% and `address` LIKE %\u0443\u043b\u0438\u0446\u0430 \u0438\u0432\u0430\u043d\u043e\u0432\u0430 15 \u043a\u0432\u0430\u0440\u0442\u0438\u0440\u0430 14% order by `id` asc, `pariatur` desc)",
+              "message": "SQLSTATE[42S22]: Column not found: 1054 Unknown column 'last_name' in 'where clause' (Connection: mysql, SQL: select * from `orders` where `first_name` LIKE %\u0418\u0432\u0430\u043d% and `last_name` LIKE %\u0418\u0432\u0430\u043d\u043e\u0432% and `email` LIKE %Ivan@mail.ru% and `phone` LIKE %89999999999% and `city` LIKE %\u0418\u0432\u0430\u043d\u043e\u0432\u0441\u043a% and `address` LIKE %\u0443\u043b\u0438\u0446\u0430 \u0438\u0432\u0430\u043d\u043e\u0432\u0430 15 \u043a\u0432\u0430\u0440\u0442\u0438\u0440\u0430 14% order by `error` asc, `cupiditate` desc)",
               "exception": "Illuminate\\Database\\QueryException",
               "file": "/application/vendor/laravel/framework/src/Illuminate/Database/Connection.php",
               "line": 822,
@@ -2041,7 +2220,7 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '53'
+          x-ratelimit-remaining: '52'
           access-control-allow-origin: '*'
         description: null
         custom: []
@@ -2076,7 +2255,7 @@ endpoints:
         name: first_name
         description: ''
         required: true
-        example: ipsum
+        example: expedita
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2085,7 +2264,7 @@ endpoints:
         name: email
         description: ''
         required: true
-        example: magnus.torphy@example.net
+        example: mccullough.jaylin@example.net
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2094,7 +2273,7 @@ endpoints:
         name: phone
         description: ''
         required: true
-        example: sint
+        example: accusantium
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2103,7 +2282,7 @@ endpoints:
         name: city
         description: ''
         required: true
-        example: sequi
+        example: qui
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2112,7 +2291,7 @@ endpoints:
         name: address
         description: ''
         required: true
-        example: aut
+        example: autem
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2121,7 +2300,7 @@ endpoints:
         name: delivery_type
         description: ''
         required: true
-        example: 18
+        example: 19
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -2140,7 +2319,7 @@ endpoints:
         name: 'products[].id'
         description: ''
         required: true
-        example: deserunt
+        example: perferendis
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2149,7 +2328,7 @@ endpoints:
         name: 'products[].quantity'
         description: ''
         required: true
-        example: 15
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -2158,23 +2337,23 @@ endpoints:
         name: 'products[].size_id'
         description: ''
         required: true
-        example: officia
+        example: eos
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      first_name: ipsum
-      email: magnus.torphy@example.net
-      phone: sint
-      city: sequi
-      address: aut
-      delivery_type: 18
+      first_name: expedita
+      email: mccullough.jaylin@example.net
+      phone: accusantium
+      city: qui
+      address: autem
+      delivery_type: 19
       products:
         -
-          id: deserunt
-          quantity: 15
-          size_id: officia
+          id: perferendis
+          quantity: 1
+          size_id: eos
     fileParameters: []
     responses: []
     responseFields: []
@@ -2204,13 +2383,13 @@ endpoints:
         name: Order
         description: ''
         required: true
-        example: 94
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      Order: 94
+      Order: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -2218,13 +2397,13 @@ endpoints:
         name: status_id
         description: ''
         required: true
-        example: 19
+        example: 18
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      status_id: 19
+      status_id: 18
     fileParameters: []
     responses: []
     responseFields: []
@@ -2254,13 +2433,13 @@ endpoints:
         name: product_id
         description: 'The ID of the product.'
         required: true
-        example: 10
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      product_id: 10
+      product_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -2294,13 +2473,13 @@ endpoints:
         name: product_id
         description: 'The ID of the product.'
         required: true
-        example: 10
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      product_id: 10
+      product_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -2344,7 +2523,7 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '52'
+          x-ratelimit-remaining: '51'
           access-control-allow-origin: '*'
         description: null
         custom: []
@@ -2379,7 +2558,7 @@ endpoints:
         name: city
         description: ''
         required: true
-        example: qui
+        example: in
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2388,7 +2567,7 @@ endpoints:
         name: date
         description: 'Must be a valid date.'
         required: true
-        example: '2024-01-26T13:57:02'
+        example: '2024-12-15T13:57:27'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2397,15 +2576,15 @@ endpoints:
         name: comment
         description: ''
         required: false
-        example: neque
+        example: labore
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      city: qui
-      date: '2024-01-26T13:57:02'
-      comment: neque
+      city: in
+      date: '2024-12-15T13:57:27'
+      comment: labore
     fileParameters: []
     responses: []
     responseFields: []
@@ -2435,13 +2614,13 @@ endpoints:
         name: time_id
         description: 'The ID of the time.'
         required: true
-        example: 2
+        example: 18
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      time_id: 2
+      time_id: 18
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -2449,7 +2628,7 @@ endpoints:
         name: city
         description: ''
         required: true
-        example: voluptatum
+        example: aut
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2458,7 +2637,7 @@ endpoints:
         name: date
         description: 'Must be a valid date.'
         required: true
-        example: '2024-01-26T13:57:02'
+        example: '2024-12-15T13:57:27'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2467,15 +2646,15 @@ endpoints:
         name: comment
         description: ''
         required: false
-        example: blanditiis
+        example: et
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      city: voluptatum
-      date: '2024-01-26T13:57:02'
-      comment: blanditiis
+      city: aut
+      date: '2024-12-15T13:57:27'
+      comment: et
     fileParameters: []
     responses: []
     responseFields: []
@@ -2505,13 +2684,13 @@ endpoints:
         name: time_id
         description: 'The ID of the time.'
         required: true
-        example: 5
+        example: 10
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      time_id: 5
+      time_id: 10
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -2549,13 +2728,13 @@ endpoints:
         name: PaymentId
         description: ''
         required: true
-        example: neque
+        example: eius
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      PaymentId: neque
+      PaymentId: eius
     fileParameters: []
     responses: []
     responseFields: []
@@ -2619,7 +2798,7 @@ endpoints:
         name: title
         description: ''
         required: true
-        example: magni
+        example: vel
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2628,7 +2807,7 @@ endpoints:
         name: description
         description: ''
         required: true
-        example: 'Aut aliquid repellat est error laboriosam velit commodi.'
+        example: 'Blanditiis consequuntur est occaecati veniam accusamus.'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2637,7 +2816,7 @@ endpoints:
         name: result
         description: ''
         required: false
-        example: eos
+        example: sunt
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2646,7 +2825,7 @@ endpoints:
         name: short_name
         description: ''
         required: false
-        example: cupiditate
+        example: perferendis
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2655,7 +2834,7 @@ endpoints:
         name: compound
         description: ''
         required: false
-        example: et
+        example: incidunt
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2664,7 +2843,7 @@ endpoints:
         name: sort
         description: ''
         required: false
-        example: 2
+        example: 17
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -2673,13 +2852,22 @@ endpoints:
         name: Purpose
         description: ''
         required: false
-        example: unde
+        example: voluptates
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
       product_category_id:
         name: product_category_id
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      brand_id:
+        name: brand_id
         description: ''
         required: false
         example: null
@@ -2737,7 +2925,7 @@ endpoints:
         name: 'sizes[].unit'
         description: ''
         required: false
-        example: sit
+        example: sint
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2746,7 +2934,7 @@ endpoints:
         name: 'sizes[].value'
         description: ''
         required: false
-        example: et
+        example: tempora
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2762,17 +2950,17 @@ endpoints:
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      title: magni
-      description: 'Aut aliquid repellat est error laboriosam velit commodi.'
-      result: eos
-      short_name: cupiditate
-      compound: et
-      sort: 2
-      Purpose: unde
+      title: vel
+      description: 'Blanditiis consequuntur est occaecati veniam accusamus.'
+      result: sunt
+      short_name: perferendis
+      compound: incidunt
+      sort: 17
+      Purpose: voluptates
       sizes:
         -
-          unit: sit
-          value: et
+          unit: sint
+          value: tempora
     fileParameters:
       avatar: null
       images:
@@ -2805,13 +2993,13 @@ endpoints:
         name: product_id
         description: 'The ID of the product.'
         required: true
-        example: 10
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      product_id: 10
+      product_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -2819,7 +3007,7 @@ endpoints:
         name: title
         description: ''
         required: false
-        example: quaerat
+        example: hic
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2828,7 +3016,7 @@ endpoints:
         name: description
         description: ''
         required: false
-        example: 'Corporis aut suscipit cum quod.'
+        example: 'Fugiat animi sapiente ut explicabo a.'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2837,7 +3025,7 @@ endpoints:
         name: result
         description: ''
         required: false
-        example: nisi
+        example: maxime
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2846,7 +3034,7 @@ endpoints:
         name: short_name
         description: ''
         required: false
-        example: repudiandae
+        example: reprehenderit
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2855,7 +3043,7 @@ endpoints:
         name: sort
         description: ''
         required: false
-        example: 11
+        example: 4
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -2864,7 +3052,7 @@ endpoints:
         name: compound
         description: ''
         required: false
-        example: molestiae
+        example: soluta
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2873,7 +3061,7 @@ endpoints:
         name: Purpose
         description: ''
         required: false
-        example: vitae
+        example: omnis
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2928,7 +3116,7 @@ endpoints:
         name: 'sizes[].unit'
         description: ''
         required: false
-        example: qui
+        example: alias
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2937,7 +3125,7 @@ endpoints:
         name: 'sizes[].value'
         description: ''
         required: false
-        example: eaque
+        example: consectetur
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2980,17 +3168,17 @@ endpoints:
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      title: quaerat
-      description: 'Corporis aut suscipit cum quod.'
-      result: nisi
-      short_name: repudiandae
-      sort: 11
-      compound: molestiae
-      Purpose: vitae
+      title: hic
+      description: 'Fugiat animi sapiente ut explicabo a.'
+      result: maxime
+      short_name: reprehenderit
+      sort: 4
+      compound: soluta
+      Purpose: omnis
       sizes:
         -
-          unit: qui
-          value: eaque
+          unit: alias
+          value: consectetur
     fileParameters:
       avatar: null
       images:
@@ -3027,7 +3215,7 @@ endpoints:
         name: login
         description: ''
         required: true
-        example: animi
+        example: nihil
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -3036,14 +3224,14 @@ endpoints:
         name: password
         description: ''
         required: true
-        example: 'J}Pl=?I{XkTE'
+        example: 41R\RHX5+d(AE
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      login: animi
-      password: 'J}Pl=?I{XkTE'
+      login: nihil
+      password: 41R\RHX5+d(AE
     fileParameters: []
     responses: []
     responseFields: []
